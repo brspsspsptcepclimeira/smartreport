@@ -1,6 +1,6 @@
 import { formatMilhar, formatDate, pretyyCaptalize as pretyyCaptalize } from './functions.mjs'
 import { Declarant } from './declarant.mjs'
-import { generateFakeReport } from './document.mjs'
+//import { generateFakeReport } from './document.mjs'
 
 export class Report{
     constructor(rawNumber){
@@ -161,7 +161,7 @@ export class Report{
         return this._executionPlace
     }
     writeFullReportNumber(){
-        return `Laudo ${this.number}/${this.year}`
+        return `<h1>Laudo ${this.number}/${this.year}</h1>`
     }
     writePreamble(){
         const designatedDate = this.designatedDate
@@ -190,7 +190,7 @@ export class Report{
         }else{
             delegate = `o(a) Delegado(a) de Polícia Dr(a). ${delegate}`
         }
-        return `Em ${designatedDate}, na cidade de ${city} e no Instituto de Criminalística, da Superintendência da Polícia Técnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 3-10-1941 e Decreto-Lei 42847 de 9-2-1998, ${director}, foi ${expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, ${delegate}.`
+        return `<p class = 'classpreamble'>Em ${designatedDate}, na cidade de ${city} e no Instituto de Criminalística, da Superintendência da Polícia Técnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 3-10-1941 e Decreto-Lei 42847 de 9-2-1998, ${director}, foi ${expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, ${delegate}.`
     }
     writeObjective(){
         let rdo = this.rdo
@@ -210,14 +210,15 @@ export class Report{
         }
         let questions = ''
         if(this.questions.length<1){
-            questions = '.'
+            questions = '.</p>'
         }else{
-            questions = `, e visava dar resposta aos seguintes quesitos:`
+            questions = `, e visava dar resposta aos seguintes quesitos:</p><ol>`
             for (let i=0; i<this.questions.length; i++){
-                questions += `${this.questions[i]}`
+                questions += `<li>${this.questions[i]}</li>`
             }
+            questions += '</ol>'
         }
-        return `O objetivo do exame pericial, em conformidade com a requisição ${rdo} - ${chamber}, era ${objective}, sendo sua natureza, ${nature}${reportedAs}${questions}`
+        return `<h2 class='class-subtitle2'>Objetivo</h2><p class = 'class-paragraph'>O objetivo do exame pericial, em conformidade com a requisição ${rdo} - ${chamber}, era ${objective}, sendo sua natureza, ${nature}${reportedAs}${questions}`
     }
     writeHistoric(){
         const date = this.executionDate
@@ -239,29 +240,26 @@ export class Report{
         const typeLocal = this.executionTypePlace
         const city = this.executionCity
         const local = this.executionPlace
-        return `Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${typeLocal}, situado na cidade de ${city}, ${local}, e realizaram o exame requisitado.`
+        return `<h2 class='class-subtitle2'>Histórico</h2><p class = 'class-paragraph'>Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${typeLocal}, situado na cidade de ${city}, ${local}, e realizaram o exame requisitado.</P>`
     }
 }
 
 
 //******** TESTES ********************************************************************************************
-  
-createNewReport()
+console.log(generateFakeReport())
 
-function createNewReport(){
-    //const report = new Report('12345')
-    //report.designatedDate = '11/10/2010'
-    //report.nature = 'o levantamento de local de furto'
-    //report.reportedAs = 'relatado como sendo uma colisão com duas vítimas fatais'
-    //report.rdo ='rdo qw7894-1'
-    //report.questions.push('valor1', 'valor2')
-    //report.declarants.push(new Declarant('MARCELO DE OLIVEIRA CAPRISTO'), new Declarant('marcia regina de oliveira capristo'), new Declarant('fernanda e silva dos santos'))
-    //console.log(report.declarants[0].name)
-    //console.log(report.designatedDate)
-    //console.log(report.writeFullReportNumber())
-    //console.log(report.writePreamble())
-    //console.log(report.writeObjective())
-    //console.log(report.questions[0])
-    // console.log(report.writeHistoric())
-    generateFakeReport()
+export function generateFakeReport(){
+    const reportFake = new Report('45789')
+    reportFake.expert = 'marcos capristo'
+    reportFake.delegate = 'tabajara zuliani dos santos'
+    reportFake.rdo = 'rdo po9874-1'
+    reportFake.nature = 'o levantamento de local de acidente de trânsito'
+    reportFake.reportedAs = 'relatado como sendo a ocorrência de uma colisão frontal com uma vítima fatal'
+    reportFake.questions = ['houve crime? ', 'É possível determinar a velocidade de marcha dos veíuclos?', 'É possivel determinar quem deu causa ao acidente?']
+    reportFake.designatedDate = '12-2-2018'
+    reportFake.executionHour = '14h00'
+    reportFake.ftp='regis fernando de oliveira'
+    reportFake.executionTypePlace = 'um trecho da rodovia Anhanguera'
+    reportFake.executionPlace = 'na pista Sul, an altura do km 125'
+    return `${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}`
 }
