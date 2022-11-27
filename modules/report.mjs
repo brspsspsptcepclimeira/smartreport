@@ -1,5 +1,6 @@
-import {formatMilhar, formatDate, pretyyCaptalize as pretyyCaptalize} from './functions.mjs'
-import {Declarant} from './declarant.mjs'
+import { formatMilhar, formatDate, pretyyCaptalize as pretyyCaptalize } from './functions.mjs'
+import { Declarant } from './declarant.mjs'
+import { generateFakeReport } from './document.mjs'
 
 export class Report{
     constructor(rawNumber){
@@ -22,6 +23,7 @@ export class Report{
         this.executionHour = '12h00'
         this.ftp = ''
         this.ftpGender = 0
+        this.executionTypePlace = ''
         this.executionCity = 'Limeira'
         this.executionPlace = ''
         this.declarants = []
@@ -115,6 +117,49 @@ export class Report{
     get reportedAs(){
         return this._reportedAs
     }
+    set executionDate(newDate){
+        let myDate = typeof newDate === 'string' ? new Date( newDate.replace(/-/g, '\/')) : newDate
+        this._designatedDate = formatDate(myDate)
+    }
+    get executionDate(){
+        return this._designatedDate
+    }
+    set executionHour(newHour){
+        this._executionHour = newHour.trim()
+    }
+    get executionHour(){
+        return this._executionHour
+    }
+    set ftp(newFtp){
+        this._ftp = pretyyCaptalize(newFtp)
+    }
+    get ftp(){
+        return this._ftp
+    }
+    set ftpGender(newFtpGender){
+        this._ftpGender = newFtpGender
+    }
+    get ftpGender(){
+        return this._ftpGender
+    }
+    set executionTypePlace(newExecutionTypePlace){
+        this._executionTypePlace = newExecutionTypePlace.trim()
+    }
+    get executionTypePlace(){
+        return this._executionTypePlace
+    }
+    set executionCity(newExecutionCity){
+        this._executionCity = pretyyCaptalize(newExecutionCity)
+    }
+    get executionCity(){
+        return this._executionCity
+    }
+    set executionPlace(newExecutionPlace){
+        this._executionPlace = newExecutionPlace.trim()
+    }
+    get executionPlace(){
+        return this._executionPlace
+    }
     writeFullReportNumber(){
         return `Laudo ${this.number}/${this.year}`
     }
@@ -169,13 +214,32 @@ export class Report{
         }else{
             questions = `, e visava dar resposta aos seguintes quesitos:`
             for (let i=0; i<this.questions.length; i++){
-                questions += `\n${i+1}. ${this.questions[i]}`
+                questions += `${this.questions[i]}`
             }
         }
         return `O objetivo do exame pericial, em conformidade com a requisição ${rdo} - ${chamber}, era ${objective}, sendo sua natureza, ${nature}${reportedAs}${questions}`
     }
     writeHistoric(){
-        return '`Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${tipo}, situado na cidade de ${cidade}, ${local}.`'
+        const date = this.executionDate
+        const hour = this.executionHour
+        let expert = this.expert
+        if(this.expertGender==0){
+            expert += ', perito criminal,'
+        }else if(this.expertGender==1){
+            expert += `, perita criminal,`
+        }
+        let ftp = ` e ${this.ftp}`
+        if(this.ftpGender==0){
+            ftp += ', fotógrafo técnico pericial, dirigiram-se'
+        }else if(this.ftpGender==1){
+            ftp += ', fotógrafa técnico pericial, dirigiram-se'
+        }else{
+            ftp = 'dirigiu-se'
+        }
+        const typeLocal = this.executionTypePlace
+        const city = this.executionCity
+        const local = this.executionPlace
+        return `Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${typeLocal}, situado na cidade de ${city}, ${local}, e realizaram o exame requisitado.`
     }
 }
 
@@ -185,18 +249,19 @@ export class Report{
 createNewReport()
 
 function createNewReport(){
-    const report = new Report('12345')
-    report.designatedDate = '11/10/2010'
-    report.nature = 'o levantamento de local de furto'
-    report.reportedAs = 'relatado como sendo uma colisão com duas vítimas fatais'
-    report.rdo ='rdo qw7894-1'
-    report.questions.push('valor1', 'valor2')
-    report.declarants.push(new Declarant('MARCELO DE OLIVEIRA CAPRISTO'), new Declarant('marcia regina de oliveira capristo'), new Declarant('fernanda e silva dos santos'))
-    console.log(report.declarants[0].name)
+    //const report = new Report('12345')
+    //report.designatedDate = '11/10/2010'
+    //report.nature = 'o levantamento de local de furto'
+    //report.reportedAs = 'relatado como sendo uma colisão com duas vítimas fatais'
+    //report.rdo ='rdo qw7894-1'
+    //report.questions.push('valor1', 'valor2')
+    //report.declarants.push(new Declarant('MARCELO DE OLIVEIRA CAPRISTO'), new Declarant('marcia regina de oliveira capristo'), new Declarant('fernanda e silva dos santos'))
+    //console.log(report.declarants[0].name)
     //console.log(report.designatedDate)
     //console.log(report.writeFullReportNumber())
     //console.log(report.writePreamble())
     //console.log(report.writeObjective())
     //console.log(report.questions[0])
     // console.log(report.writeHistoric())
+    generateFakeReport()
 }
