@@ -1,7 +1,7 @@
 import {formatMilhar, formatDate, pretyyCaptalize as pretyyCaptalize} from './functions.mjs'
 import {Declarant} from './declarant.mjs'
 
-class Report{
+export class Report{
     constructor(rawNumber){
         this.designatedDate = new Date()
         this.number = rawNumber
