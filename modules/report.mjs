@@ -1,6 +1,7 @@
-import { formatMilhar, formatDate, pretyyCaptalize as pretyyCaptalize } from './functions.mjs'
+import { formatMilhar, formatDate, pretyyCaptalize } from './functions.mjs'
 import { Declarant } from './declarant.mjs'
-//import { generateFakeReport } from './document.mjs'
+import { Place } from './place.mjs'
+import { Veicle } from './veicles.mjs'
 
 export class Report{
     constructor(rawNumber){
@@ -26,7 +27,13 @@ export class Report{
         this.executionTypePlace = ''
         this.executionCity = 'Limeira'
         this.executionPlace = ''
+        this.garrison = ''
+        this.delegatePresent = false
         this.declarants = []
+        this.places = []
+        this.veicles = []
+        this.pieces = []
+        this.corpuses = []
     }
     set number(newNumber){
         this._number = formatMilhar(newNumber)
@@ -160,6 +167,12 @@ export class Report{
     get executionPlace(){
         return this._executionPlace
     }
+    set garrison(newGarrison){
+        this._garrison = newGarrison.trim()
+    }
+    get garrison(){
+        return this._garrison
+    }
     writeFullReportNumber(){
         return `<h1>Laudo ${this.number}/${this.year}</h1>`
     }
@@ -240,7 +253,55 @@ export class Report{
         const typeLocal = this.executionTypePlace
         const city = this.executionCity
         const local = this.executionPlace
-        return `<h2 class='class-subtitle2'>Histórico</h2><p class = 'class-paragraph'>Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${typeLocal}, situado na cidade de ${city}, ${local}, e realizaram o exame requisitado.</P>`
+        const garrison = this.garrison
+        let delegatePresent = ''
+        if(this.delegatePresent){
+            let delegate = this.delegate
+            if(this.delegateGender==1){
+                delegate = `A Delegada de Polícia, Dra. ${delegate}`
+            }else{
+                delegate = `O Delegado de Polícia, Dr. ${delegate}`
+            }
+            delegatePresent = `<p class = 'class-paragraph'>${delegate}, presente ao local, acompanhou o exame pericial.</p>`
+        }
+        return `<h2 class='class-subtitle2'>Histórico</h2><p class = 'class-paragraph'>Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${typeLocal}, situado na cidade de ${city}, ${local}, e realizaram o exame requisitado. ${garrison}</P>${delegatePresent}`
+    }
+    writeDeclarations(){
+        if (this.declarants.length<1){
+            return
+        }
+        let statements = `<h2 class='class-subtitle2'>Informes</h2>`
+        for(let i = 0; i<this.declarants.length; i++){
+            statements += `<h3>${this.declarants[i].name} - ${this.declarants[i].qualification}</h3><p class = 'class-paragraph'>${this.declarants[i].statement}</p>`
+        }
+        return statements
+    }
+    writePlace(){
+        if(this.places.length < 1){
+            return
+        }
+        let statement = `<h2 class='class-subtitle2'>Descrição e Exame do Local</h2>`
+        if(this.places.length > 1){
+            statement = `<h2 class='class-subtitle2'>Descrição e Exame dos Locais</h2>`
+        }
+        for(let i=0; i<this.places.length; i++){
+            statement+=`<h3>${this.places[i].type} - Características e Descrição</h3><p>${this.places[i].description}</p><h3>Exame</h3><p>${this.places[i].exame}</p>`
+        }
+        return statement
+    }
+    writeVeicle(){
+        let statement = ''
+        if(this.veicles.length<1){
+            return
+        }else if(this.veicles.length==1){
+            statement = `<h2 class='class-subtitle2'>Descrição e Exame do Veículo</h2>`
+        }else{
+            statement = `<h2 class='class-subtitle2'>Descrição e Exame dos Veículos</h2>`
+        }
+        for(let i=0; i<this.veicles.length; i++){
+            statement += `<h3>${this.veicles[i].tipo}, da marca ${this.veicles[i].marca}, modelo ${this.veicles[i].modelo}, na cor ${this.veicles[i].cor}</h3><p></p>`
+        }
+        return statement
     }
 }
 
@@ -255,11 +316,40 @@ export function generateFakeReport(){
     reportFake.rdo = 'rdo po9874-1'
     reportFake.nature = 'o levantamento de local de acidente de trânsito'
     reportFake.reportedAs = 'relatado como sendo a ocorrência de uma colisão frontal com uma vítima fatal'
-    reportFake.questions = ['houve crime? ', 'É possível determinar a velocidade de marcha dos veíuclos?', 'É possivel determinar quem deu causa ao acidente?']
+    reportFake.questions = ['houve crime? ', 'É possível determinar a velocidade de marcha dos veículos?', 'É possível determinar quem deu causa ao acidente?']
     reportFake.designatedDate = '12-2-2018'
     reportFake.executionHour = '14h00'
     reportFake.ftp='regis fernando de oliveira'
     reportFake.executionTypePlace = 'um trecho da rodovia Anhanguera'
-    reportFake.executionPlace = 'na pista Sul, an altura do km 125'
-    return `${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}`
+    reportFake.executionPlace = 'na pista Sul, na altura do km 125'
+    reportFake.garrison = 'Quando da chegada da equipe, a Polícia Militar, representada na pessoa do Cabo PM Carvalho, guarnecia o local, deu informes e acompanhou o exame.'
+    reportFake.delegatePresent = true
+    const marcelo = new Declarant('MARCELO DE OLIVEIRA CAPRISTO')
+    marcelo.qualification = 'Proprietário do Imóvel'
+    marcelo.statement = 'Declarou que estava em sua residência quando percebeu que coisas estranhas estavam acontecendo.'
+    const maria = new Declarant('MARIA DAS DORES E SILVA')
+    maria.qualification = 'Condutora do veículo automotor'
+    maria.statement = 'Declarou que conduzia seu veículo pela pista Sul, na faixa da direita, quando foi surpreendida pela passagem da motocicleta que vinha do acostamento.'
+    reportFake.declarants.push(marcelo, maria)
+    const imovel = new Place
+    imovel.type = 'Imóvel Residencial'
+    imovel.description = 'Edificado em área urbana, de esquina, térreo, vedado em sua parte frontal por muro de alvenaria encimado por ofendículos do tipo ponta de lança, com um portão basculante instalado em sua parte frontal. Possuia dois quartos, uma cozinha, um banheiro e uma sala de estar.'
+    imovel.exame = 'Por sobre o muro, na direção do portão basculante, havia manchas de sujidade compatíveis com apoio de dedos. A porta de acesso à sala se encontrava rompida. As janelas dos demais cômodos apresentavam sinais de arrombamento. No interior da casa, por sobre o piso, havia pegadas compatíveis com calçado número 42.'
+    const via = new Place
+    via.type = 'Via Pública'
+    via.description = 'Rua de mão única, que se desenvolvia em sentido retilíneo e em leve aclive na direção Norte, encontrava-se em bom estado de conservação, com sinalização adequada e iluminação pública operante.'
+    via.exame = 'Por sobre o pavimento asfáltico havia manchas hemáticas compatíveis com gotejamento dinâmico sucessivo, formando uma trilha sinuosa em direção ao calçamento do passeio à direita da via.'
+    reportFake.places.push(imovel, via)
+    const carro = new Veicle
+    carro.tipo = `automóvel`
+    carro.marca = `fiat`
+    carro.modelo = `pálio`
+    carro.cor = 'prata'
+    const moto = new Veicle
+    moto.tipo = `motocicleta`
+    moto.marca = `Honda`
+    moto.modelo = `CG 125`
+    moto.cor = 'preta'
+    reportFake.veicles.push(carro, moto)
+    return `${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writeDeclarations()}${reportFake.writePlace()}${reportFake.writeVeicle()}`
 }

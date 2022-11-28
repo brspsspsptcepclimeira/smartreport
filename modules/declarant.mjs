@@ -1,4 +1,4 @@
-import { pretyyCaptalize as pretyyCaptalize } from "./functions.mjs"
+import { pretyyCaptalize } from "./functions.mjs"
 
 export class Declarant{
     constructor(name){
@@ -19,7 +19,7 @@ export class Declarant{
         return this._qualification.trim()
     }
     set statement(newStatement){
-        this._statiment = newStatement.trim()
+        this._statement = newStatement.trim()
     }
     get statement(){
         return this._statement
