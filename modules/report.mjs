@@ -2,6 +2,8 @@ import { formatMilhar, formatDate, pretyyCaptalize } from './functions.mjs'
 import { Declarant } from './declarant.mjs'
 import { Place } from './place.mjs'
 import { Veicle } from './veicles.mjs'
+import { Piece } from './pieces.mjs'
+import { Corpuses } from './corpuses.mjs'
 
 export class Report{
     constructor(rawNumber){
@@ -34,6 +36,7 @@ export class Report{
         this.veicles = []
         this.pieces = []
         this.corpuses = []
+        this.conclusion = ''
     }
     set number(newNumber){
         this._number = formatMilhar(newNumber)
@@ -278,7 +281,7 @@ export class Report{
     }
     writePlace(){
         if(this.places.length < 1){
-            return
+            return ''
         }
         let statement = `<h2 class='class-subtitle2'>Descrição e Exame do Local</h2>`
         if(this.places.length > 1){
@@ -292,7 +295,7 @@ export class Report{
     writeVeicle(){
         let statement = ''
         if(this.veicles.length<1){
-            return
+            return ''
         }else if(this.veicles.length==1){
             statement = `<h2 class='class-subtitle2'>Descrição e Exame do Veículo</h2>`
         }else{
@@ -300,6 +303,45 @@ export class Report{
         }
         for(let i=0; i<this.veicles.length; i++){
             statement += `<h3>${this.veicles[i].tipo}, da marca ${this.veicles[i].marca}, modelo ${this.veicles[i].modelo}, na cor ${this.veicles[i].cor}</h3><p></p>`
+        }
+        return statement
+    }
+    writePiece(){
+        let statement = ''
+        if(this.pieces.length < 1){
+            return ''
+        }else if(this.pieces.length == 1){
+            statement = `<h2 class='class-subtitle2'>${this.pieces[0].type} - Descrição e Exame</h2>${this.pieces[0].description}`
+        }else{
+            statement = `<h2 class='class-subtitle2'>Descrição e Exame das Peças</h2>`
+            for(let i=0; i<this.pieces.length; i++){
+                statement += `<h3>${this.pieces[i].type}</h3>${this.pieces[i].description}`
+            } 
+        }
+        return statement
+    }
+    writeCorpuses(){
+        let statement = ''
+        if(this.corpuses.length < 1){
+            return ''
+        }else if(this.corpuses.length == 1){
+            statement = `<h2 class='class-subtitle2'>Descrição e Exame do Cadáver</h2>`
+        }else{
+            statement = `<h2 class='class-subtitle2'>Descrição e Exame dos Cadáveres</h2>`
+        }
+        for(let i=0; i<this.corpuses.length; i++){
+            statement += `<h3>${this.corpuses[i].identify()}</h3>${this.corpuses[i].description}`
+        }         
+        return statement
+    }
+    writeConclusion(){
+        let statement = `<h2 class='class-subtitle2'>Conclusão</h2>`
+        if(this.questions.length>0){
+            statement += `<p class = 'class-paragraph'>Em resposta aos quesitos</p><ol>`
+            for(let i=0; i<this.questions.length; i++){
+                statement += `<li>${this.questions[i]}</li>`
+            }
+            statement += `</ol>`
         }
         return statement
     }
@@ -351,5 +393,17 @@ export function generateFakeReport(){
     moto.modelo = `CG 125`
     moto.cor = 'preta'
     reportFake.veicles.push(carro, moto)
-    return `${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writeDeclarations()}${reportFake.writePlace()}${reportFake.writeVeicle()}`
+    const faca = new Piece
+    faca.type = `faca de mesa`
+    faca.description = `faca constituída de um cabo e uma lâmina` 
+    const cadeado = new Piece
+    cadeado.type = 'Cadeado'
+    cadeado.description = 'Cadeado com chave provido de gancho metálico.'
+    reportFake.pieces.push(faca, cadeado)
+    const joao = new Corpuses
+    joao.name = `joão de oliveira das dores`
+    joao.age = '32'
+    joao.sex = 'masculino'
+    reportFake.corpuses.push(joao)
+    return `${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writeDeclarations()}${reportFake.writePlace()}${reportFake.writeVeicle()}${reportFake.writePiece()}${reportFake.writeCorpuses()}${reportFake.writeConclusion()}`
 }
