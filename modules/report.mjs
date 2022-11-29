@@ -206,7 +206,7 @@ export class Report{
         }else{
             delegate = `o(a) Delegado(a) de Polícia Dr(a). ${delegate}`
         }
-        return `<p class = 'classpreamble'>Em ${designatedDate}, na cidade de ${city} e no Instituto de Criminalística, da Superintendência da Polícia Técnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 3-10-1941 e Decreto-Lei 42847 de 9-2-1998, ${director}, foi ${expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, ${delegate}.`
+        return `<p class = 'class-preamble'>Em ${designatedDate}, na cidade de ${city} e no Instituto de Criminalística, da Superintendência da Polícia Tecnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 03-10-1941 e Decreto-Lei 42847 de 09-02-1998, ${director}, foi ${expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, ${delegate}.`
     }
     writeObjective(){
         let rdo = this.rdo
