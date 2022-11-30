@@ -253,7 +253,7 @@ export class Report{
         if(this.ftpGender==0){
             ftp += ', fotógrafo técnico pericial, dirigiram-se'
         }else if(this.ftpGender==1){
-            ftp += ', fotógrafa técnico pericial, dirigiram-se'
+            ftp += ', fotógrafa técnica pericial, dirigiram-se'
         }else{
             ftp = 'dirigiu-se'
         }
@@ -271,7 +271,7 @@ export class Report{
             }
             delegatePresent = `<p class = 'class-paragraph'>${delegate}, presente ao local, acompanhou o exame pericial.</p>`
         }
-        return `<h2 class='class-subtitle2'>Histórico</h2><p class = 'class-paragraph'>Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${typeLocal}, situado na cidade de ${city}, ${local}, e realizaram o exame requisitado. ${garrison}</P>${delegatePresent}`
+        return `<h2 class='class-subtitle2'>Histórico</h2><p class = 'class-paragraph'>Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${typeLocal}, na cidade de ${city}, ${local}, e realizaram o exame requisitado. ${garrison}</P>${delegatePresent}`
     }
     writeDeclarations(){
         if (this.declarants.length<1){

@@ -48,3 +48,11 @@ export let quillInforms = new Quill('#editorInforms', {
       },
     theme: 'snow'
   });
+//QUILL HISTÓRICO
+export let quillHistoric = new Quill('#editorHistoric', {
+  modules: {
+      toolbar: '#toolbar-historic',
+      toolbar: toolbarOptions,
+    },
+  theme: 'snow'
+});

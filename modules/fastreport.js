@@ -1,15 +1,16 @@
-import { todayDate } from "./functions.mjs";
+import { todayDate, zeroToLeft } from "./functions.mjs";
 import { generateFakeReport, Report} from "./report.mjs";
-import { quillObjective, quillQuestions } from "./quills.mjs";
+import { quillObjective, quillQuestions, quillHistoric } from "./quills.mjs";
 //const myReport = generateFakeReport()
 const report = new Report('0')
 function ini(){
     document.querySelector('#input-designated-date').value = todayDate('Sun May 11,2014')
     document.querySelector('#input-execution-date').value = todayDate()+'T12:00'
-    document.querySelector('#input-director').value="Samuel Alves de Melo Neto"
-    document.querySelector('#input-expert').value="Marcos Capristo"
-    document.querySelector('#input-city-epc').value="Limeira"
-    document.querySelector('#input-delegate').value=""
+    document.querySelector('#input-director').value = "Samuel Alves de Melo Neto"
+    document.querySelector('#input-expert').value = "Marcos Capristo"
+    document.querySelector('#input-city-epc').value = "Limeira"
+    document.querySelector('#idelpol').value="Del. Sec. Limeira Plantão"
+    document.querySelector('#iobjective').value = "Realizar Exame Inicial"
 }
 document.onload = ini()
 //************************************************* Menu
@@ -46,6 +47,7 @@ document.querySelector('#send-questions').addEventListener('click', ()=>{
         }
     }
     showModal('#form-objective')
+    quillObjective.root.innerHTML = report.writeObjective()
 })
 //************************************************** Ícones das Janelas */
 document.querySelector('#magic-number').addEventListener('click', ()=>{
@@ -68,12 +70,23 @@ document.querySelector('#magic-objective').addEventListener('click', ()=>{
     report.chamber = `${document.querySelector('#idelpol').value}`
     report.objective = `${document.querySelector('#iobjective').value}`
     report.nature = `${document.querySelector('#inature').value}`
+    report.reportedAs = `${document.querySelector('#ireportedas').value}`
     quillObjective.root.innerHTML = report.writeObjective()
 })
 document.querySelector('#btn-questions').addEventListener('click', ()=>{
     showModal('#form-questions')
     quillQuestions.format('list', 'ordered');
     quillQuestions.focus()
+})
+document.querySelector('#magic-historic').addEventListener('click', ()=>{
+    let data = new Date(document.querySelector('#input-execution-date').value)
+    report.executionDate = `${data.getFullYear()}-${data.getMonth()+1}-${data.getDate()}`
+    report.executionHour = `${zeroToLeft(data.getHours())}h${zeroToLeft(data.getMinutes())}`
+    report.ftp = document.querySelector('#iftp').value
+    report.ftpGender = document.querySelector('#select-ftp').selectedIndex
+    report.executionCity = document.querySelector('#iexecutioncity').value
+    report.executionTypePlace = document.querySelector('#ilocaltype').value
+    quillHistoric.root.innerHTML = report.writeHistoric()
 })
 //************************ Atualizar o relatório */
 function writeToHTML(){
