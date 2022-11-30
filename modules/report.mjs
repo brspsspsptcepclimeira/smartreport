@@ -32,9 +32,12 @@ export class Report{
         this.executionPlace = ''
         this.garrison = ''
         this.delegatePresent = false
-        this.declarants = []
-        this.places = []
+        //this.declarants = []
+        this.informs = ''
+        //this.places = []
+        this.place = ''
         this.veicles = []
+        this.veicle = ''
         this.pieces = []
         this.corpuses = []
         this.conclusion = ''
@@ -177,6 +180,24 @@ export class Report{
     get garrison(){
         return this._garrison
     }
+    set informs(newInforms){
+        this._informs = newInforms.trim()
+    }
+    get informs(){
+        return this._informs
+    }
+    set place(newPlace){
+        this._place = newPlace.trim()
+    }
+    get place(){
+        return this._place
+    }
+    set veicle(newVeicle){
+        this._veicle = newVeicle.trim()
+    }
+    get veicle(){
+        return this._veicle
+    }
     writeHeader(){
         const statement =  `<p class='class-header'><strong>SECRETARIA DA SEGURANÇA PÚBLICA</strong></p><p class='class-header'><strong>SUPERINTENDÊNCIA DA POLÍCIA TÉCNCIO-CIENTÍFICA</strong></p><p  class='class-header'>INSTITUTO DE CRIMINALÍSTICA</p><P  class='class-header'>PERITO CRIMINAL DR. OCTÁVIO DE BRITO ALVARENGA</P><p class='class-header'>NÚCLEO DE AMERICANA (LIM)</p>`
         return ''
@@ -290,33 +311,36 @@ export class Report{
         return `<h2 class='class-subtitle2'>Histórico</h2><p class = 'class-paragraph'>${returnList[index]}</p><p>${delegate}</p>`
     }
     writeDeclarations(){
-        if (this.declarants.length<1){
+        if (this.informs.length<20){
             return
         }
-        let statements = `<h2 class='class-subtitle2'>Informes</h2>`
+        /* let statements = `<h2 class='class-subtitle2'>Informes</h2>`
         for(let i = 0; i<this.declarants.length; i++){
             statements += `<h3>${this.declarants[i].name} - ${this.declarants[i].qualification}</h3><p class = 'class-paragraph'>${this.declarants[i].statement}</p>`
         }
-        return statements
-    }
+        return statements */
+        return this.informs
+    } 
     writePlace(){
-        if(this.places.length < 1){
+        if(this.place.length < 20){
             return ''
         }
-        let statement = `<h2 class='class-subtitle2'>Descrição e Exame do Local</h2>`
+        /*let statement = `<h2 class='class-subtitle2'>Descrição e Exame do Local</h2>`
         if(this.places.length > 1){
             statement = `<h2 class='class-subtitle2'>Descrição e Exame dos Locais</h2>`
         }
         for(let i=0; i<this.places.length; i++){
             statement+=`<h3>${this.places[i].type} - Características e Descrição</h3><p>${this.places[i].description}</p><h3>Exame</h3><p>${this.places[i].exame}</p>`
         }
-        return statement
+        return statement */
+        return this.place
     }
     writeVeicle(){
         let statement = ''
-        if(this.veicles.length<1){
+        if(this.veicle.length<20){
             return ''
-        }else if(this.veicles.length==1){
+        }
+        /* else if(this.veicles.length==1){
             statement = `<h2 class='class-subtitle2'>Descrição e Exame do Veículo</h2>`
         }else{
             statement = `<h2 class='class-subtitle2'>Descrição e Exame dos Veículos</h2>`
@@ -324,7 +348,8 @@ export class Report{
         for(let i=0; i<this.veicles.length; i++){
             statement += `<h3>${this.veicles[i].tipo}, da marca ${this.veicles[i].marca}, modelo ${this.veicles[i].modelo}, na cor ${this.veicles[i].cor}</h3><p></p>`
         }
-        return statement
+        return statement */
+        return this.veicle
     }
     writePiece(){
         let statement = ''
@@ -386,14 +411,14 @@ export function generateFakeReport(){
     reportFake.executionPlace = 'na pista Sul, na altura do km 125'
     reportFake.garrison = 'Quando da chegada da equipe, a Polícia Militar, representada na pessoa do Cabo PM Carvalho, guarnecia o local, deu informes e acompanhou o exame.'
     reportFake.delegatePresent = true
-    const marcelo = new Declarant('MARCELO DE OLIVEIRA CAPRISTO')
-    marcelo.qualification = 'Proprietário do Imóvel'
-    marcelo.statement = 'Declarou que estava em sua residência quando percebeu que coisas estranhas estavam acontecendo.'
-    const maria = new Declarant('MARIA DAS DORES E SILVA')
-    maria.qualification = 'Condutora do veículo automotor'
-    maria.statement = 'Declarou que conduzia seu veículo pela pista Sul, na faixa da direita, quando foi surpreendida pela passagem da motocicleta que vinha do acostamento.'
-    reportFake.declarants.push(marcelo, maria)
-    const imovel = new Place
+    //const marcelo = new Declarant('MARCELO DE OLIVEIRA CAPRISTO')
+    //marcelo.qualification = 'Proprietário do Imóvel'
+    //marcelo.statement = 'Declarou que estava em sua residência quando percebeu que coisas estranhas estavam acontecendo.'
+    //const maria = new Declarant('MARIA DAS DORES E SILVA')
+    //maria.qualification = 'Condutora do veículo automotor'
+    //maria.statement = 'Declarou que conduzia seu veículo pela pista Sul, na faixa da direita, quando foi surpreendida pela passagem da motocicleta que vinha do acostamento.'
+    //reportFake.declarants.push(marcelo, maria)
+    /* const imovel = new Place
     imovel.type = 'Imóvel Residencial'
     imovel.description = 'Edificado em área urbana, de esquina, térreo, vedado em sua parte frontal por muro de alvenaria encimado por ofendículos do tipo ponta de lança, com um portão basculante instalado em sua parte frontal. Possuia dois quartos, uma cozinha, um banheiro e uma sala de estar.'
     imovel.exame = 'Por sobre o muro, na direção do portão basculante, havia manchas de sujidade compatíveis com apoio de dedos. A porta de acesso à sala se encontrava rompida. As janelas dos demais cômodos apresentavam sinais de arrombamento. No interior da casa, por sobre o piso, havia pegadas compatíveis com calçado número 42.'
@@ -424,6 +449,6 @@ export function generateFakeReport(){
     joao.name = `joão de oliveira das dores`
     joao.age = '32'
     joao.sex = 'masculino'
-    reportFake.corpuses.push(joao)
-    return `${reportFake.writeHeader()}${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writeDeclarations()}${reportFake.writePlace()}${reportFake.writeVeicle()}${reportFake.writePiece()}${reportFake.writeCorpuses()}${reportFake.writeConclusion()}`
+    reportFake.corpuses.push(joao) */
+    return `${reportFake.writeHeader()}${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writePlace()}${reportFake.writeVeicle()}${reportFake.writePiece()}${reportFake.writeCorpuses()}${reportFake.writeConclusion()}`
 }

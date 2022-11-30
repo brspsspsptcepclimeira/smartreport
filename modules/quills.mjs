@@ -56,3 +56,67 @@ export let quillHistoric = new Quill('#editorHistoric', {
     },
   theme: 'snow'
 });
+//QUILL LOCAL
+export let quillLocal = new Quill('#editorLocal', {
+  modules: {        
+      toolbar: '#toolbar-local',
+      toolbar: {
+          container: toolbarOptionsImg,
+              handlers:{image:function(){
+                  if(this.quill.getSelection().index>0){
+                      previusForm = '#form-local'
+                      previusQuil = this.quill
+                      previusIndex = this.quill.getSelection().index
+                      abrirEditorImgESelecionarImagem()
+                  }else{
+                      alert('Posicione o cursor do mouse no local onde a imagem será inserida.')
+                      return
+                  }
+              },
+          }            
+      }
+  },
+  theme: 'snow'
+});
+//QUILL VEÍCULO
+export let quillVeicle = new Quill('#editorVeicle', {
+  modules: {        
+      toolbar: {
+          container: toolbarOptionsImg,
+              handlers:{image:function(){
+                  if(this.quill.getSelection().index>0){
+                      previusForm = '#form-veicle'
+                      previusQuil = this.quill
+                      previusIndex = this.quill.getSelection().index
+                      abrirEditorImgESelecionarImagem()
+                  }else{
+                      alert('Posicione o cursor do mouse no local onde a imagem será inserida.')
+                      return
+                  }
+              },
+          }            
+      }
+  },
+  theme: 'snow'
+});
+//QUILL PEÇA
+export let quillThing = new Quill('#editorThing', {
+  modules: {        
+      toolbar: {
+          container: toolbarOptionsImg,
+              handlers:{image:function(){
+                  if(this.quill.getSelection().index>0){
+                      previusForm = '#form-thing'
+                      previusQuil = this.quill
+                      previusIndex = this.quill.getSelection().index
+                      abrirEditorImgESelecionarImagem()
+                  }else{
+                      alert('Posicione o cursor do mouse no local onde a imagem será inserida.')
+                      return
+                  }
+              },
+          }            
+      }
+  },
+  theme: 'snow'
+});

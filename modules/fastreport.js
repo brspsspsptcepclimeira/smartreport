@@ -1,6 +1,6 @@
 import { todayDate, zeroToLeft } from "./functions.mjs";
 import { generateFakeReport, Report} from "./report.mjs";
-import { quillObjective, quillQuestions, quillHistoric } from "./quills.mjs";
+import { quillObjective, quillQuestions, quillHistoric, quillInforms, quillLocal, quillVeicle, quillThing} from "./quills.mjs";
 //const myReport = generateFakeReport()
 const report = new Report('0')
 function ini(){
@@ -13,12 +13,20 @@ function ini(){
     document.querySelector('#iobjective').value = "Realizar Exame Inicial"
 }
 document.onload = ini()
+//************************************************* Variáveis Globias */
+let previusForm = ''
+let previusQuil = ''
+let previusIndex = ''
 //************************************************* Menu
 document.querySelector('#menu-number').addEventListener('click', ()=>{showModal('#form-number-report', document.querySelector('#input-number-report'))})
 document.querySelector('#menu-preamble').addEventListener('click', ()=>{showModal('#form-preamble', document.querySelector('#input-delegate'))})
 document.querySelector('#menu-objective').addEventListener('click', ()=>{showModal('#form-objective', document.querySelector('#irdo'))})
 document.querySelector('#menu-historic').addEventListener('click', ()=>{showModal('#form-historic', document.querySelector('#input-execution-date'))})
+document.querySelector('#menu-informs').addEventListener('click', ()=>{showModal('#form-informs')})
 document.querySelector('#menu-print').addEventListener('click', ()=>{print()})
+document.querySelector('#menu-local').addEventListener('click', ()=>{showModal('#form-local')})
+document.querySelector('#menu-veicle').addEventListener('click', ()=>{showModal('#form-veicle')})
+document.querySelector('#menu-thing').addEventListener('click', ()=>{showModal('#form-thing')})
 //************************************************* Botões das Janelas */
 document.querySelectorAll('.btn-close').forEach(element=>{
     element.addEventListener('click', ()=>{
@@ -51,6 +59,21 @@ document.querySelector('#send-questions').addEventListener('click', ()=>{
 document.querySelector('#btn-form-historic').addEventListener('click', ()=>{
     writeToHTML()
     showModal('#form-informs')
+})
+document.querySelector('#btn-form-informs').addEventListener('click', ()=>{
+    report.informs = quillInforms.root.innerHTML
+    writeToHTML()
+    showModal('#form-local')
+})
+document.querySelector('#btn-form-local').addEventListener('click', ()=>{
+    report.place = quillLocal.root.innerHTML
+    writeToHTML()
+    showModal('#form-veicle')
+})
+document.querySelector('#btn-form-veicle').addEventListener('click', ()=>{
+    report.veicle = quillVeicle.root.innerHTML
+    writeToHTML()
+    showModal('#form-thing')
 })
 //************************************************** Ícones das Janelas */
 document.querySelector('#magic-number').addEventListener('click', ()=>{
@@ -103,6 +126,46 @@ document.querySelector('#magic-historic').addEventListener('click', ()=>{
     report.executionTypePlace = document.querySelector('#ilocaltype').value
     quillHistoric.root.innerHTML = report.writeHistoric(document.querySelector('#selectlocal').selectedIndex)
 })
+document.querySelector('#magic-informs').addEventListener('click', ()=>{
+    if(quillInforms.getText().trim()==''){
+        quillInforms.root.innerHTML = `<h2>Informes</h2>`
+    }
+    quillInforms.root.innerHTML += `<h3>Declarações de ...</h3><p>... descreva aqui as informações prestadas ...</p>`
+})
+document.querySelector('#magic-local-house').addEventListener('click', ()=>{
+    if(quillLocal.getText().trim()==''){
+        quillLocal.root.innerHTML = `<h2>Descrição e Exame do Local</h2><h3>Características do Local</h3><p></p><h3>Exame</h3><p></p><p></p>`
+    }
+    let hei = window.innerHeight
+    let atributos = `width=660, height=${hei}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
+    window.open('./pages/imoveis.html', 'janela', atributos)
+})
+document.querySelector('#magic-local-street').addEventListener('click', ()=>{
+    if(quillLocal.getText().trim()==''){
+        quillLocal.root.innerHTML = `<h2>Descrição e Exame do Local</h2><h3>Características do Local</h3><p></p><h3>Exame</h3><p></p><p></p>`
+    }
+    let hei = window.innerHeight
+    let atributos = `width=660, height=${hei}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
+    window.open('./pages/via.html', 'janela', atributos)
+})
+document.querySelector('#magic-local-estruct').addEventListener('click', ()=>{
+    if(quillLocal.getText().trim()==''){
+        quillLocal.root.innerHTML = `<h2>Descrição e Exame do Local</h2><h3>Características do Local</h3><p></p><h3>Preservação</h3><p></p><h3>Exame</h3><p></p><p></p>`
+    }
+})
+document.querySelector('#magic-carchash').addEventListener('click', ()=>{
+    if(quillVeicle.getText().trim()==''){
+        quillVeicle.root.innerHTML = `<h2>Descrição e Exame do Veículo</h2><p></p>`
+    }
+    let hei = window.innerHeight
+    let atributos = `width=660, height=${hei}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
+    window.open('./pages/veiculos.html', 'janela', atributos)
+})
+document.querySelector('#magic-veicle-estruct').addEventListener('click', ()=>{
+    if(quillVeicle.getText().trim()==''){
+        quillVeicle.root.innerHTML = `<h2>Descrição e Exame do Veículo</h2><p>Identificação ...</p><p>Placa de Identificação</p><p>Chassi</p><p>Motor</p><p>Localização e posição ...</p><p>Danos ...</p><p>Sistemas ...</p><p>Pneus ...</p>`
+    }
+})
 //************************* Comandos de Seleção - Comboboxes*/
 document.querySelector('#selectlocal').addEventListener('change', ()=>{
     document.querySelector('#ilocaltype').placeholder = document.querySelector('#selectlocal').value
@@ -111,9 +174,19 @@ document.querySelector('#selectlocal').addEventListener('change', ()=>{
 function writeToHTML(){
     let statement = `<h1>${document.querySelector('#editor-number').value.trim()}</h1>`
     statement += `<p class = 'article-preamble'>${document.querySelector('#editor-preamble').value.trim()}</p>`
-    statement += quillObjective.root.innerHTML
-    statement += quillHistoric.root.innerHTML
-    document.querySelector('#report').innerHTML = statement
+    if(quillObjective.getText().length>20){
+        statement += quillObjective.root.innerHTML
+    }
+    if(quillHistoric.getText().length>20){
+        statement += quillHistoric.root.innerHTML
+    }
+    if(quillInforms.getText().length>20){
+        statement += quillInforms.root.innerHTML
+    }
+    if(quillLocal.getText().length>20){
+        statement += quillLocal.root.innerHTML
+    }
+    document.querySelector('#report').innerHTML = statement.replaceAll('<p><br></p>', '')
 }    
 //********************** Exibe Janela de Edição */
 function showModal(element_, withfocus=''){

@@ -259,6 +259,10 @@ div.left, div.right{
 .longtext2{
     width: 150px;
 }
+.longtext21{
+    margin-left: 0px;
+    padding-bottom: 0px;
+}
 .longtext4{
     width: 300px;
 }
@@ -360,7 +364,7 @@ div.level-button, div.level-top{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color:gray;
 }
-p.longtext2, select.longtext2, p.longtext4, select.longtext4{
+p.longtext2, p.longtext21, select.longtext2, p.longtext4, select.longtext4{
     font-family: 'Times New Roman', Times, serif;
     margin-top: 1.5rem;
     color:gray;
