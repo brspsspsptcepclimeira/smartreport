@@ -16,6 +16,7 @@ export class Report{
         this.expertGender = 0
         this.delegate = 'Rodrigo Rodrigues'
         this.delegateGender = 0
+        this.delegatePresent = false
         this.rdo = ''
         this.chamber = 'Del. Sec. Limeira Plantão'
         this.objective = 'realizar exame inicial'
@@ -26,8 +27,8 @@ export class Report{
         this.executionHour = '12h00'
         this.ftp = ''
         this.ftpGender = 0
-        this.executionTypePlace = ''
-        this.executionCity = 'Limeira'
+        //this.executionChamber= ''
+        //this.executionCity = 'Limeira'
         this.executionPlace = ''
         this.garrison = ''
         this.delegatePresent = false
@@ -152,18 +153,18 @@ export class Report{
     get ftpGender(){
         return this._ftpGender
     }
-    set executionTypePlace(newExecutionTypePlace){
-        this._executionTypePlace = newExecutionTypePlace.trim()
+   /*  set executionChamber(newExecutionChamber){
+        this._executionChamber = pretyyCaptalize(newExecutionChamber)
     }
-    get executionTypePlace(){
-        return this._executionTypePlace
-    }
-    set executionCity(newExecutionCity){
+    get executionChamber(){
+        return this._executionChamber
+    } */
+    /* set executionCity(newExecutionCity){
         this._executionCity = pretyyCaptalize(newExecutionCity)
     }
     get executionCity(){
         return this._executionCity
-    }
+    } */
     set executionPlace(newExecutionPlace){
         this._executionPlace = newExecutionPlace.trim()
     }
@@ -240,7 +241,7 @@ export class Report{
         }
         return `<h2 class='class-subtitle2'>Objetivo</h2><p class = 'class-paragraph'>O objetivo do exame pericial, em conformidade com a requisição ${rdo} - ${chamber}, era ${objective}, sendo sua natureza, ${nature}${reportedAs}${questions}`
     }
-    writeHistoric(){
+    writeHistoric(index){
         const date = this.executionDate
         const hour = this.executionHour
         let expert = this.expert
@@ -251,15 +252,15 @@ export class Report{
         }
         let ftp = ` e ${this.ftp}`
         if(this.ftpGender==0){
-            ftp += ', fotógrafo técnico pericial, dirigiram-se'
+            ftp += ', fotógrafo técnico pericial'
         }else if(this.ftpGender==1){
-            ftp += ', fotógrafa técnica pericial, dirigiram-se'
+            ftp += ', fotógrafa técnica pericial'
         }else{
             ftp = 'dirigiu-se'
         }
         const typeLocal = this.executionTypePlace
-        const city = this.executionCity
-        const local = this.executionPlace
+        //const city = this.executionCity
+        //const local = this.executionPlace
         const garrison = this.garrison
         let delegatePresent = ''
         if(this.delegatePresent){
@@ -271,7 +272,22 @@ export class Report{
             }
             delegatePresent = `<p class = 'class-paragraph'>${delegate}, presente ao local, acompanhou o exame pericial.</p>`
         }
-        return `<h2 class='class-subtitle2'>Histórico</h2><p class = 'class-paragraph'>Em ${date} às ${hour}, ${expert} ${ftp} ao local indicado, ${typeLocal}, na cidade de ${city}, ${local}, e realizaram o exame requisitado. ${garrison}</P>${delegatePresent}`
+        let returnList = [] //0-Externo, 1-EPC, 2-Delpol, 3-Pátio
+        returnList.push(`Em ${date} às ${hour}, ${expert} ${ftp}, dirigiram-se ao local indicado, ${typeLocal}, e realizaram o exame requisitado. ${garrison}`)
+        returnList.push(`Em ${date} às ${hour}, ${expert} ${ftp}, procederam ao exame do veículo apresentado na base da ${typeLocal}.`)
+        returnList.push(`Em ${date} às ${hour}, ${expert} ${ftp}, dirigiram-se ${typeLocal} e procederam ao exame requisitado. Quando da chegada da equipe, servidores indicaram o veículo a ser examinado.`)
+        returnList.push(`dirigiram-se ao ${typeLocal} e proccederam ao exame requisitado. Quando da chegada da equipe, funcionários do pátio indicaram o veículo a ser examinado`)
+        let delegate = ''
+        if(this.delegatePresent == true){
+            if(this.delegateGender==1){
+                delegate = `A delegada de polícia, Dra. ${this.delegate}, presente ao local, acompanhou o trabalho da perícia.`
+            }else if(this.delegateGender==0){
+                delegate = `O delegada de polícia, Dr. ${this.delegate}, presente ao local, acompanhou o trabalho da perícia.`
+            }else{
+                delegate = ''
+            }        
+        }
+        return `<h2 class='class-subtitle2'>Histórico</h2><p class = 'class-paragraph'>${returnList[index]}</p><p>${delegate}</p>`
     }
     writeDeclarations(){
         if (this.declarants.length<1){

@@ -14,10 +14,10 @@ function ini(){
 }
 document.onload = ini()
 //************************************************* Menu
-document.querySelector('#menu-number').addEventListener('click', ()=>{showModal('#form-number-report')})
-document.querySelector('#menu-preamble').addEventListener('click', ()=>{showModal('#form-preamble')})
-document.querySelector('#menu-objective').addEventListener('click', ()=>{showModal('#form-objective')})
-document.querySelector('#menu-historic').addEventListener('click', ()=>{showModal('#form-historic')})
+document.querySelector('#menu-number').addEventListener('click', ()=>{showModal('#form-number-report', document.querySelector('#input-number-report'))})
+document.querySelector('#menu-preamble').addEventListener('click', ()=>{showModal('#form-preamble', document.querySelector('#input-delegate'))})
+document.querySelector('#menu-objective').addEventListener('click', ()=>{showModal('#form-objective', document.querySelector('#irdo'))})
+document.querySelector('#menu-historic').addEventListener('click', ()=>{showModal('#form-historic', document.querySelector('#input-execution-date'))})
 document.querySelector('#menu-print').addEventListener('click', ()=>{print()})
 //************************************************* Botões das Janelas */
 document.querySelectorAll('.btn-close').forEach(element=>{
@@ -26,17 +26,16 @@ document.querySelectorAll('.btn-close').forEach(element=>{
     })
 })
 document.querySelector('#btn-form-number-report').addEventListener('click', ()=>{
-    //report.writeFullReportNumber()
     writeToHTML()
-    showModal('#form-preamble')
+    showModal('#form-preamble', document.querySelector('#input-delegate'))
 })
 document.querySelector('#btn-form-preamble').addEventListener('click', ()=>{
     writeToHTML()
-    showModal('#form-objective')
+    showModal('#form-objective', document.querySelector('#irdo'))
 })
 document.querySelector('#btn-form-objective').addEventListener('click', ()=>{
     writeToHTML()
-    showModal('#form-historic')
+    showModal('#form-historic',document.querySelector('#input-execution-date'))
 })
 document.querySelector('#send-questions').addEventListener('click', ()=>{
     report.questions = []
@@ -48,6 +47,10 @@ document.querySelector('#send-questions').addEventListener('click', ()=>{
     }
     showModal('#form-objective')
     quillObjective.root.innerHTML = report.writeObjective()
+})
+document.querySelector('#btn-form-historic').addEventListener('click', ()=>{
+    writeToHTML()
+    showModal('#form-informs')
 })
 //************************************************** Ícones das Janelas */
 document.querySelector('#magic-number').addEventListener('click', ()=>{
@@ -84,15 +87,32 @@ document.querySelector('#magic-historic').addEventListener('click', ()=>{
     report.executionHour = `${zeroToLeft(data.getHours())}h${zeroToLeft(data.getMinutes())}`
     report.ftp = document.querySelector('#iftp').value
     report.ftpGender = document.querySelector('#select-ftp').selectedIndex
-    report.executionCity = document.querySelector('#iexecutioncity').value
+    if(document.querySelector('#iguarnicaopatente').value.trim()=='' || document.querySelector('#iguarnicaonome').value.trim()=='' ){
+        report.garrison = ''
+    }else{
+        let policia = document.querySelector('#selectguarnicao').value
+        let parca = `${document.querySelector('#iguarnicaopatente').value} ${document.querySelector('#iguarnicaonome').value}`
+        let vtr = document.querySelector('#iguarnicaovtr').value
+        report.garrison = `Quando da chegada da equipe, a ${policia}, representada na pessoa ${parca}, de posse da viatura ${vtr}, guarnecia o local.`
+    }
+    if(document.querySelector('#check-authorit').checked){
+        report.delegatePresent = true
+    }else{
+        report.delegatePresent = false
+    }
     report.executionTypePlace = document.querySelector('#ilocaltype').value
-    quillHistoric.root.innerHTML = report.writeHistoric()
+    quillHistoric.root.innerHTML = report.writeHistoric(document.querySelector('#selectlocal').selectedIndex)
+})
+//************************* Comandos de Seleção - Comboboxes*/
+document.querySelector('#selectlocal').addEventListener('change', ()=>{
+    document.querySelector('#ilocaltype').placeholder = document.querySelector('#selectlocal').value
 })
 //************************ Atualizar o relatório */
 function writeToHTML(){
     let statement = `<h1>${document.querySelector('#editor-number').value.trim()}</h1>`
     statement += `<p class = 'article-preamble'>${document.querySelector('#editor-preamble').value.trim()}</p>`
     statement += quillObjective.root.innerHTML
+    statement += quillHistoric.root.innerHTML
     document.querySelector('#report').innerHTML = statement
 }    
 //********************** Exibe Janela de Edição */
