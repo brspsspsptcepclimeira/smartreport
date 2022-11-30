@@ -176,8 +176,12 @@ export class Report{
     get garrison(){
         return this._garrison
     }
+    writeHeader(){
+        const statement =  `<p class='class-header'><strong>SECRETARIA DA SEGURANÇA PÚBLICA</strong></p><p class='class-header'><strong>SUPERINTENDÊNCIA DA POLÍCIA TÉCNCIO-CIENTÍFICA</strong></p><p  class='class-header'>INSTITUTO DE CRIMINALÍSTICA</p><P  class='class-header'>PERITO CRIMINAL DR. OCTÁVIO DE BRITO ALVARENGA</P><p class='class-header'>NÚCLEO DE AMERICANA (LIM)</p>`
+        return ''
+    }
     writeFullReportNumber(){
-        return `<h1>Laudo ${this.number}/${this.year}</h1>`
+        return `Laudo ${this.number}/${this.year}`
     }
     writePreamble(){
         const designatedDate = this.designatedDate
@@ -206,11 +210,11 @@ export class Report{
         }else{
             delegate = `o(a) Delegado(a) de Polícia Dr(a). ${delegate}`
         }
-        return `<p class = 'class-preamble'>Em ${designatedDate}, na cidade de ${city} e no Instituto de Criminalística, da Superintendência da Polícia Tecnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 03-10-1941 e Decreto-Lei 42847 de 09-02-1998, ${director}, foi ${expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, ${delegate}.`
+        return `Em ${designatedDate}, na cidade de ${city} e no Instituto de Criminalística, da Superintendência da Polícia Tecnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 03-10-1941 e Decreto-Lei 42847 de 09-02-1998, ${director}, foi ${expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, ${delegate}.`
     }
     writeObjective(){
         let rdo = this.rdo
-        if(rdo.trim()==''){
+        if(rdo.length<6){
             rdo = `recebida via telefonema e e-mail`
         }else{
             rdo = `referente ao ${rdo}/${this.year}`
@@ -405,5 +409,5 @@ export function generateFakeReport(){
     joao.age = '32'
     joao.sex = 'masculino'
     reportFake.corpuses.push(joao)
-    return `${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writeDeclarations()}${reportFake.writePlace()}${reportFake.writeVeicle()}${reportFake.writePiece()}${reportFake.writeCorpuses()}${reportFake.writeConclusion()}`
+    return `${reportFake.writeHeader()}${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writeDeclarations()}${reportFake.writePlace()}${reportFake.writeVeicle()}${reportFake.writePiece()}${reportFake.writeCorpuses()}${reportFake.writeConclusion()}`
 }

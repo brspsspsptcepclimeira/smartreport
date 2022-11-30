@@ -39,4 +39,15 @@ function pretyyCaptalize(_texto){
     return fullTexto.trim().replace(' Da ', ' da ').replace(' De ', ' de ').replace(' E ', ' e ').replace(' Do ', ' do ').replace(' Das ', ' das ').replace(' Dos ', ' dos ')
 }
 
-export {zeroToLeft, formatMilhar, formatDate, pretyyCaptalize}
+//Data de hoje formatada para iniciar o relatório
+function todayDate() {
+    let d = new Date()
+    let month = '' + (d.getMonth() + 1)
+    let day = '' + d.getDate()
+    let year = d.getFullYear()
+    if (month.length < 2) month = '0' + month
+    if (day.length < 2) day = '0' + day
+    return [year, month, day].join('-')
+}
+
+export {zeroToLeft, formatMilhar, formatDate, pretyyCaptalize, todayDate}
