@@ -1,6 +1,6 @@
 import { todayDate, zeroToLeft } from "./functions.mjs";
 import { generateFakeReport, Report} from "./report.mjs";
-import { quillObjective, quillQuestions, quillHistoric, quillInforms, quillLocal, quillVeicle, quillThing} from "./quills.mjs";
+import { quillObjective, quillQuestions, quillHistoric, quillInforms, quillLocal, quillVeicle, quillThing, quillCorpuses, quillConclusion} from "./quills.mjs";
 //const myReport = generateFakeReport()
 const report = new Report('0')
 function ini(){
@@ -14,6 +14,7 @@ function ini(){
 }
 document.onload = ini()
 //************************************************* Variáveis Globias */
+let atributos = `width=660, height=${window.innerHeight}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
 let previusForm = ''
 let previusQuil = ''
 let previusIndex = ''
@@ -23,10 +24,15 @@ document.querySelector('#menu-preamble').addEventListener('click', ()=>{showModa
 document.querySelector('#menu-objective').addEventListener('click', ()=>{showModal('#form-objective', document.querySelector('#irdo'))})
 document.querySelector('#menu-historic').addEventListener('click', ()=>{showModal('#form-historic', document.querySelector('#input-execution-date'))})
 document.querySelector('#menu-informs').addEventListener('click', ()=>{showModal('#form-informs')})
-document.querySelector('#menu-print').addEventListener('click', ()=>{print()})
 document.querySelector('#menu-local').addEventListener('click', ()=>{showModal('#form-local')})
 document.querySelector('#menu-veicle').addEventListener('click', ()=>{showModal('#form-veicle')})
 document.querySelector('#menu-thing').addEventListener('click', ()=>{showModal('#form-thing')})
+document.querySelector('#menu-corpuses').addEventListener('click', ()=>{showModal('#form-corpuses')})
+document.querySelector('#menu-conclusion').addEventListener('click', ()=>{
+    toConclusion()
+    showModal('#form-conclusion')
+})
+document.querySelector('#menu-print').addEventListener('click', ()=>{print()})
 //************************************************* Botões das Janelas */
 document.querySelectorAll('.btn-close').forEach(element=>{
     element.addEventListener('click', ()=>{
@@ -74,6 +80,22 @@ document.querySelector('#btn-form-veicle').addEventListener('click', ()=>{
     report.veicle = quillVeicle.root.innerHTML
     writeToHTML()
     showModal('#form-thing')
+})
+document.querySelector('#btn-form-thing').addEventListener('click', ()=>{
+    report.piece = quillThing.root.innerHTML
+    writeToHTML()
+    showModal('#form-corpuses')
+})
+document.querySelector('#btn-form-corpuses').addEventListener('click', ()=>{
+    report.corpuse = quillCorpuses.root.innerHTML
+    writeToHTML()
+    toConclusion()
+    showModal('#form-conclusion')
+})
+document.querySelector('#btn-form-conclusion').addEventListener('click', ()=>{
+    report.conclusion = quillConclusion.root.innerHTML
+    writeToHTML()
+    hideModal()
 })
 //************************************************** Ícones das Janelas */
 document.querySelector('#magic-number').addEventListener('click', ()=>{
@@ -136,16 +158,12 @@ document.querySelector('#magic-local-house').addEventListener('click', ()=>{
     if(quillLocal.getText().trim()==''){
         quillLocal.root.innerHTML = `<h2>Descrição e Exame do Local</h2><h3>Características do Local</h3><p></p><h3>Exame</h3><p></p><p></p>`
     }
-    let hei = window.innerHeight
-    let atributos = `width=660, height=${hei}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
     window.open('./pages/imoveis.html', 'janela', atributos)
 })
 document.querySelector('#magic-local-street').addEventListener('click', ()=>{
     if(quillLocal.getText().trim()==''){
         quillLocal.root.innerHTML = `<h2>Descrição e Exame do Local</h2><h3>Características do Local</h3><p></p><h3>Exame</h3><p></p><p></p>`
     }
-    let hei = window.innerHeight
-    let atributos = `width=660, height=${hei}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
     window.open('./pages/via.html', 'janela', atributos)
 })
 document.querySelector('#magic-local-estruct').addEventListener('click', ()=>{
@@ -157,8 +175,6 @@ document.querySelector('#magic-carchash').addEventListener('click', ()=>{
     if(quillVeicle.getText().trim()==''){
         quillVeicle.root.innerHTML = `<h2>Descrição e Exame do Veículo</h2><p></p>`
     }
-    let hei = window.innerHeight
-    let atributos = `width=660, height=${hei}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
     window.open('./pages/veiculos.html', 'janela', atributos)
 })
 document.querySelector('#magic-veicle-estruct').addEventListener('click', ()=>{
@@ -166,6 +182,50 @@ document.querySelector('#magic-veicle-estruct').addEventListener('click', ()=>{
         quillVeicle.root.innerHTML = `<h2>Descrição e Exame do Veículo</h2><p>Identificação ...</p><p>Placa de Identificação</p><p>Chassi</p><p>Motor</p><p>Localização e posição ...</p><p>Danos ...</p><p>Sistemas ...</p><p>Pneus ...</p>`
     }
 })
+document.querySelector('#magic-things-knife').addEventListener('click', ()=>{
+    window.open('./pages/knife.html', 'janela', atributos)
+})
+document.querySelector('#magic-things-gun').addEventListener('click', ()=>{
+    window.open('./pages/gun.html', 'janela', atributos)
+})
+document.querySelector('#magic-things-bullet').addEventListener('click', ()=>{
+    window.open('./pages/bullet.html', 'janela', atributos)
+})
+document.querySelector('#magic-things-estruct').addEventListener('click', ()=>{
+    if(quillThing.getText().trim()==''){
+        quillThing.root.innerHTML = `<h2>Descrição e Exame de Peça</h2><p></p>`
+    }
+})
+document.querySelector('#magic-corpuses').addEventListener('click', ()=>{
+    if(quillCorpuses.getText().trim()==''){
+        quillCorpuses.root.innerHTML = `<h2>Descrição e Exame do Cadáver</h2><p></p><p>A descrição minuciosa do cadáver, suas características e determinação da causa da morte, são objetos de laudo pericial a ser expedido pelo Instituto Médico Legal.</p>`
+    }
+    window.open('./pages/corpuses.html', 'janela', atributos)
+})
+//************************* Texto para Conclusão */
+function toConclusion(){
+    if(quillConclusion.getText().trim()!=''){
+        return
+    }
+    let statement = `<h2>Conclusão</h2><p></p>`
+    if(report.questions.length>0){
+        statement += `<p>Em resposta aos quesitos:</p><ol>`
+        for(let i=0; i<report.questions.length; i++){
+            statement += `<li>${report.questions[i]}</li>`
+        }
+        statement += `</ol>`
+    }
+    statement += `<p>Este laudo segue assinado digitalmente e encontra-se arquivado no sistema GDL da Superintendência da Polícia Técnico Científica do Estado de São Paulo.</p>`
+    if(document.querySelector('#check-signature').checked){
+        statement += `<p class='signature-expert'>${report.expert}</p>`
+        if(report.expertGender==1){
+            statement += `<p class='signature-label'>Perita Criminal</p>`
+        }else{
+            statement += `<p class='signature-label'>Perito Criminal</p>`
+        }
+    }
+    quillConclusion.root.innerHTML = statement
+}
 //************************* Comandos de Seleção - Comboboxes*/
 document.querySelector('#selectlocal').addEventListener('change', ()=>{
     document.querySelector('#ilocaltype').placeholder = document.querySelector('#selectlocal').value
@@ -185,6 +245,15 @@ function writeToHTML(){
     }
     if(quillLocal.getText().length>20){
         statement += quillLocal.root.innerHTML
+    }
+    if(quillThing.getText().length>20){
+        statement += quillThing.root.innerHTML
+    }
+    if(quillCorpuses.getText().length>20){
+        statement += quillCorpuses.root.innerHTML
+    }
+    if(quillConclusion.getText().length>20){
+        statement += quillConclusion.root.innerHTML
     }
     document.querySelector('#report').innerHTML = statement.replaceAll('<p><br></p>', '')
 }    

@@ -36,10 +36,12 @@ export class Report{
         this.informs = ''
         //this.places = []
         this.place = ''
-        this.veicles = []
+        //this.veicles = []
         this.veicle = ''
-        this.pieces = []
-        this.corpuses = []
+        //this.pieces = []
+        this.piece = ''
+        //this.corpuses = []
+        this.corpuse = ''
         this.conclusion = ''
     }
     set number(newNumber){
@@ -198,6 +200,18 @@ export class Report{
     get veicle(){
         return this._veicle
     }
+    set piece(newPiece){
+        this._piece = newPiece.trim()
+    }
+    get piece(){
+        return this._piece
+    }
+    set corpuse(newCorpuse){
+        this._corpuse = newCorpuse.trim()
+    }
+    get corpuse(){
+        return this.corpuse
+    }
     writeHeader(){
         const statement =  `<p class='class-header'><strong>SECRETARIA DA SEGURANÇA PÚBLICA</strong></p><p class='class-header'><strong>SUPERINTENDÊNCIA DA POLÍCIA TÉCNCIO-CIENTÍFICA</strong></p><p  class='class-header'>INSTITUTO DE CRIMINALÍSTICA</p><P  class='class-header'>PERITO CRIMINAL DR. OCTÁVIO DE BRITO ALVARENGA</P><p class='class-header'>NÚCLEO DE AMERICANA (LIM)</p>`
         return ''
@@ -352,7 +366,7 @@ export class Report{
         return this.veicle
     }
     writePiece(){
-        let statement = ''
+        /* let statement = ''
         if(this.pieces.length < 1){
             return ''
         }else if(this.pieces.length == 1){
@@ -363,10 +377,14 @@ export class Report{
                 statement += `<h3>${this.pieces[i].type}</h3>${this.pieces[i].description}`
             } 
         }
-        return statement
+        return statement */
+        if(this.piece<20){
+            return
+        }
+        return this.piece
     }
     writeCorpuses(){
-        let statement = ''
+        /* let statement = ''
         if(this.corpuses.length < 1){
             return ''
         }else if(this.corpuses.length == 1){
@@ -377,7 +395,11 @@ export class Report{
         for(let i=0; i<this.corpuses.length; i++){
             statement += `<h3>${this.corpuses[i].identify()}</h3>${this.corpuses[i].description}`
         }         
-        return statement
+        return statement */
+        if(this.corpuse.length == 0){
+            return
+        }
+        return this.corpuse
     }
     writeConclusion(){
         let statement = `<h2 class='class-subtitle2'>Conclusão</h2>`
@@ -450,5 +472,5 @@ export function generateFakeReport(){
     joao.age = '32'
     joao.sex = 'masculino'
     reportFake.corpuses.push(joao) */
-    return `${reportFake.writeHeader()}${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writePlace()}${reportFake.writeVeicle()}${reportFake.writePiece()}${reportFake.writeCorpuses()}${reportFake.writeConclusion()}`
+    return `${reportFake.writeHeader()}${reportFake.writeFullReportNumber()}${reportFake.writePreamble()}${reportFake.writeObjective()}${reportFake.writeHistoric()}${reportFake.writePlace()}${reportFake.writeVeicle()}${reportFake.writePiece()}${reportFake.writeConclusion()}`
 }

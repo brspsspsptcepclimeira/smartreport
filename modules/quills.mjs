@@ -120,3 +120,45 @@ export let quillThing = new Quill('#editorThing', {
   },
   theme: 'snow'
 });
+//QUILL CADÁVER
+export let quillCorpuses = new Quill('#editorCorpuses', {
+  modules: {        
+      toolbar: {
+          container: toolbarOptionsImg,
+              handlers:{image:function(){
+                  if(this.quill.getSelection().index>0){
+                      previusForm = '#form-corpuses'
+                      previusQuil = this.quill
+                      previusIndex = this.quill.getSelection().index
+                      abrirEditorImgESelecionarImagem()
+                  }else{
+                      alert('Posicione o cursor do mouse no local onde a imagem será inserida.')
+                      return
+                  }
+              },
+          }            
+      }
+  },
+  theme: 'snow'
+});
+//QUILL CONCLUSÃO
+export let quillConclusion = new Quill('#editorConclusion', {
+  modules: {        
+      toolbar: {
+          container: toolbarOptionsImg,
+              handlers:{image:function(){
+                  if(this.quill.getSelection().index>0){
+                      previusForm = '#form-conclusion'
+                      previusQuil = this.quill
+                      previusIndex = this.quill.getSelection().index
+                      abrirEditorImgESelecionarImagem()
+                  }else{
+                      alert('Posicione o cursor do mouse no local onde a imagem será inserida.')
+                      return
+                  }
+              },
+          }            
+      }
+  },
+  theme: 'snow'
+});
