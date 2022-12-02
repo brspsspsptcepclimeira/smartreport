@@ -416,7 +416,7 @@ export class Report{
 
 
 //******** TESTES ********************************************************************************************
-console.log(generateFakeReport())
+//console.log(generateFakeReport())
 
 export function generateFakeReport(){
     const reportFake = new Report('45789')

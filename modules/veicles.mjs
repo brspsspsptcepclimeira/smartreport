@@ -150,4 +150,4 @@ carro.motorFake = 'motorfake123'
 carro.cambio = 'cambio'
 carro.cambioFake = 'cambiofake'
 
-console.log(`${carro.isMecosul}\n${carro.tipo}\n${carro.marca}\n${carro.modelo}\n${carro.placa}\n${carro.chassi}\n${carro.isChassi17}\n${carro.placaFake}\n${carro.chassiFake}\n${carro.motorFake}\n${carro.cambio}\n${carro.cambioFake}`)
+//console.log(`${carro.isMecosul}\n${carro.tipo}\n${carro.marca}\n${carro.modelo}\n${carro.placa}\n${carro.chassi}\n${carro.isChassi17}\n${carro.placaFake}\n${carro.chassiFake}\n${carro.motorFake}\n${carro.cambio}\n${carro.cambioFake}`)

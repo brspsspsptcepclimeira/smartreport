@@ -1,4 +1,4 @@
-
+import { showImageEditor} from './fastreport.mjs'
 
 /*  BARRA DE FERRAMENTAS DE JANELAS QUE NÃO EXIBEM IMAGENS */
 let toolbarOptions = [
@@ -147,7 +147,7 @@ export let quillConclusion = new Quill('#editorConclusion', {
       toolbar: {
           container: toolbarOptionsImg,
               handlers:{image:function(){
-                  if(this.quill.getSelection().index>0){
+                  /* if(this.quill.getSelection().index>0){
                       previusForm = '#form-conclusion'
                       previusQuil = this.quill
                       previusIndex = this.quill.getSelection().index
@@ -155,7 +155,8 @@ export let quillConclusion = new Quill('#editorConclusion', {
                   }else{
                       alert('Posicione o cursor do mouse no local onde a imagem será inserida.')
                       return
-                  }
+                  } */
+                  showImageEditor()
               },
           }            
       }

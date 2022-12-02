@@ -20,7 +20,7 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.js" defer></script>
 
     <link rel="stylesheet" href="./styles/style.css">
-    <script src="./modules/fastreport.js" defer type="module"></script>
+    <script src="./modules/fastreport.mjs" defer type="module"></script>
     <script src="./modules/quills.mjs" defer type="module"></script>
     <link rel="shortcut icon" href="./img/faveicon.ico" type="image/x-icon">
 <!-- title irá mudar dinamicamente no momento da impressão -------------------------------------------------->
@@ -93,41 +93,46 @@
 
 
  <!-- EDITOR DE IMAGENS - AINDA EM DESENVOLVIMENTO ---------------------------------------------------------->   
-    <div class="modal" id="i-image">
+    <div class="submodal" id="image-editor">
         <!-- <div class="modal-header"> -->
             <!-- <p></p>
             <button class="subbtn-close">X</button> -->
         <!-- </div> -->
         <div class="level-midle">
-            <div class="left">
-                <img src="./img/magic.png" alt="ícone" class="toolbarbutton">
-                <img src="./img/crop.png" alt="selecionar" class="toolbarbutton" id="img-crop">
-                <!-- <img src="./img/cut.png" alt="ícone" class="toolbarbutton" id="img-cut"> -->
-                <img src="./img/full.png" alt="ícone" class="toolbarbutton" id="img-full">
-                <!-- <button class="subbtn-close">X</button> -->
-            </div>
-            <div class="midle">
-                <canvas id="i-canvas" width="600" height="400">
-                    <p>Sem suporte ao CANVAS</p>
-                </canvas>
-                <input type="text" id="i-labelimg" placeholder="Digitie aqui a legenda da imagem...">
+            <div id="imgpage">
+                <div id="leftbuttons">
+                    <img src="./img/photo.png" alt="less" class="toolbarbutton" id="img-photo">
+                    <img src="./img/more.png" alt="less" class="toolbarbutton" id="img_more">
+                    <img src="./img/less.png" alt="less" class="toolbarbutton" id="img-less">
+                    <img src="./img/magic.png" alt="ícone" class="toolbarbutton">
+                    <img src="./img/crop.png" alt="selecionar" class="toolbarbutton" id="img-crop">
+                    <img src="./img/cut.png" alt="ícone" class="toolbarbutton" id="img-cut">
+                    <img src="./img/full.png" alt="ícone" class="toolbarbutton" id="img-full">
+                    <!-- <button class="subbtn-close">X</button> -->
+                </div>
+                <div class="midle">
+                    <canvas id="i-canvas" width="700" height="400">
+                        <p>Sem suporte ao CANVAS</p>
+                    </canvas>
+                    <input type="text" id="i-labelimg" placeholder="Digitie aqui a legenda da imagem...">
+                </div>
             </div>
            <!--  <div class="right">
                 <button class="subbtn-close">X</button>
             </div> -->
         </div>
-        <input type="file" id="filedialogimg" accept=".png, .jpg, .jpeg">
+        <!-- <input type="file" id="filedialogimg" accept=".png, .jpg, .jpeg">
         <button class="btn-send" value="Save Image" id="imgsave">Enviar</button>
-        <button class="btn-send" value="Save Image" id="imgnosave">Descartar</button>
+        <button class="btn-send" value="Save Image" id="imgnosave">Descartar</button> -->
     </div>
 
-    <div class="modal" id="form-width-imagem">     
+    <!-- <div class="modal" id="form-width-imagem">     
         <div class="level-button">
             <p class="longtext2">Largura da imagem (cm)</p>
             <input type="range" id="image_width" class="longtext2" min="4" max="14" step="1" value="12">
             <button class="btn-send" id="btn_image-width-send">Avançar</button>
         </div>
-    </div>
+    </div> -->
 
 
 

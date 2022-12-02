@@ -201,6 +201,22 @@ div.left, div.right{
     padding: 0px 5px 0px 5px;
     width: fit-content;
 }
+#image-editor{
+    width:fit-content;
+    height:min-content;
+}
+div#leftbuttons{
+    padding: 0px 5px 0px 5px;
+    width:60px;
+    height: 80%;
+    float:left;
+}
+div#imgpage{
+    text-align: center;
+    width:800px;
+    height: 600px;
+    display: inline;
+}
 #report ol>li{
     margin-top: -1rem;
     margin-bottom: 1rem;
@@ -249,6 +265,7 @@ div.left, div.right{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 600px;
 }
 .longtext2, .longtext4{
     display:block;
@@ -346,11 +363,12 @@ div.level-button, div.level-top{
     border:1px solid rgb(121, 121, 121);
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     border-radius: 0.5rem;
-    top: 50;
-    left: 50;
-    /* transform: translate(-50%, -50%); */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     opacity: 0;
     pointer-events: none;
+    max-height: 680px;
 }
 .modal-header{
     display: flex;

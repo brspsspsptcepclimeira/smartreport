@@ -1,8 +1,11 @@
-import { todayDate, zeroToLeft } from "./functions.mjs";
-import { generateFakeReport, Report} from "./report.mjs";
-import { quillObjective, quillQuestions, quillHistoric, quillInforms, quillLocal, quillVeicle, quillThing, quillCorpuses, quillConclusion} from "./quills.mjs";
+import { todayDate, zeroToLeft } from "./functions.mjs"
+import { generateFakeReport, Report} from "./report.mjs"
+import { Img } from './img.mjs'
+import { quillObjective, quillQuestions, quillHistoric, quillInforms, quillLocal, quillVeicle, quillThing, quillCorpuses, quillConclusion} from "./quills.mjs"
 //const myReport = generateFakeReport()
 const report = new Report('0')
+const myImage = new Img
+myImage.canvas = document.querySelector('#i-canvas')
 function ini(){
     document.querySelector('#input-designated-date').value = todayDate('Sun May 11,2014')
     document.querySelector('#input-execution-date').value = todayDate()+'T12:00'
@@ -15,6 +18,7 @@ function ini(){
 document.onload = ini()
 //************************************************* Variáveis Globias */
 let atributos = `width=660, height=${window.innerHeight}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
+//const myCanvas = document.querySelector('#my-canvas')
 let previusForm = ''
 let previusQuil = ''
 let previusIndex = ''
@@ -230,6 +234,96 @@ function toConclusion(){
 document.querySelector('#selectlocal').addEventListener('change', ()=>{
     document.querySelector('#ilocaltype').placeholder = document.querySelector('#selectlocal').value
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export function showImageEditor(){
+    document.querySelector('#img-photo').addEventListener('click', ()=>{
+        alert('mostrar imagem')
+    }) 
+    document.querySelector('#img_more').addEventListener('click', ()=>{
+        myImage.toIncrease()
+    }) 
+    document.querySelector('#img-less').addEventListener('click', ()=>{
+       myImage.toDecrease()
+    }) 
+    myImage.width = 700
+    myImage.proportion = 0.6
+    myImage.mouseDown = false
+    myImage.canvas.addEventListener('click', ()=>{myImage.mouseClick()})
+    myImage.canvas.addEventListener('mousedown', (event)=>{myImage.setMouseDown(event)})
+    myImage.canvas.addEventListener('mouseup', (event)=>{myImage.setMouseUp(event)})
+    myImage.canvas.addEventListener('mousemove', (event)=>{
+        console.log('teste')
+    })
+    showModal('#image-editor')
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //************************ Atualizar o relatório */
 function writeToHTML(){
     let statement = `<h1>${document.querySelector('#editor-number').value.trim()}</h1>`
@@ -258,7 +352,7 @@ function writeToHTML(){
     document.querySelector('#report').innerHTML = statement.replaceAll('<p><br></p>', '')
 }    
 //********************** Exibe Janela de Edição */
-function showModal(element_, withfocus=''){
+export function showModal(element_, withfocus=''){
     if(element_==''){
         hideModal()
         return
