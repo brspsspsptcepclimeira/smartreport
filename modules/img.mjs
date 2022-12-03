@@ -1,6 +1,6 @@
 export class Img{
     constructor(){
-        this.canvas = ''
+        this.canvas = document.createElement('canvas')
         this.width = 0
         this.proportion = 0
         this.mouseDown = false
@@ -9,6 +9,7 @@ export class Img{
         this.increase = false
         this.selectedFileinWE = ''
         this.fullImg = document.createElement('img')
+        this.currentImg = document.createElement('img')
     }
     set width(newWidth){
         this._width = newWidth
@@ -32,6 +33,9 @@ export class Img{
     }
     get canvas(){
         return this._canvas
+    }
+    get ctx(){
+        return this.canvas.getContext('2d')
     }
     set mouseDown(newMouseDown){
         this._mouseDown = newMouseDown
@@ -91,12 +95,16 @@ export class Img{
         if(this.canvas.width>100){
             this.canvas.width=this.canvas.width-60
             this.canvas.height = this.canvas.width*this.proportion
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.drawImage(this.fullImg, 0, 0, this.canvas.width, this.canvas.height)
         }
     }
     toIncrease(){
         if(this.canvas.width<700){
             this.canvas.width=this.canvas.width+60
             this.canvas.height = this.canvas.width*this.proportion
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.drawImage(this.fullImg, 0, 0, this.canvas.width, this.canvas.height)
         }
     }
     resetAll(){
@@ -105,8 +113,9 @@ export class Img{
         this.decrease = false
         this.increase = false
     }
-    selecionarImagem(files){
+    selecionarImagem(files, cvs){
         if(files.length>0){
+            //let ctx = cvs.getContext('2d')
             this.selectedFileinWE = files[0]
             const readFile = new FileReader()
             readFile.onload = (textImg)=>{
@@ -116,14 +125,14 @@ export class Img{
                     this.fullImg.onload = ()=>{
                         this.width = this.fullImg.width
                         this.proportion = this.fullImg.height/this.fullImg.width
-                        //this.height = this.fullImg.height
-                        //this.proportion = this.height/this.width
-                        console.log(`Insede the promise: ${this.width} x ${this.height}`)
+                        cvs.width = 700
+                        cvs.height = 700*this.proportion
+                        this.ctx.clearRect(0, 0, cvs.width, cvs.height)
+                        this.ctx.drawImage(this.fullImg, 0, 0, cvs.width, cvs.height)
                     }
                 })
             }    
             readFile.readAsDataURL(this.selectedFileinWE)         
-            console.log(`Outside the promise: ${this.width} x ${this.height}`)
         }else{
             alert('Nenhuma Imagem selecionada.')
         }

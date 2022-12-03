@@ -17,8 +17,8 @@ function ini(){
 }
 document.onload = ini()
 //************************************************* Variáveis Globias */
-let atributos = `width=660, height=${window.innerHeight}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
-//const myCanvas = document.querySelector('#my-canvas')
+const atributos = `width=660, height=${window.innerHeight}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
+//const ctx = myImage.canvas.getContext('2d')
 let previusForm = ''
 let previusQuil = ''
 let previusIndex = ''
@@ -265,7 +265,9 @@ document.querySelector('#selectlocal').addEventListener('change', ()=>{
 
 
 export function showImageEditor(){
-    document.querySelector('#filedialogimg').addEventListener('change', ()=>{myImage.selecionarImagem(document.querySelector('#filedialogimg').files)})
+    document.querySelector('#filedialogimg').addEventListener('change', ()=>{
+        myImage.selecionarImagem(document.querySelector('#filedialogimg').files, document.querySelector('#i-canvas'))
+    })
     document.querySelector('#img-photo').addEventListener('click', ()=>{
         alert('mostrar imagem')
     }) 
@@ -281,9 +283,6 @@ export function showImageEditor(){
     myImage.canvas.addEventListener('click', ()=>{myImage.mouseClick()})
     myImage.canvas.addEventListener('mousedown', (event)=>{myImage.setMouseDown(event)})
     myImage.canvas.addEventListener('mouseup', (event)=>{myImage.setMouseUp(event)})
-   /*  myImage.canvas.addEventListener('mousemove', (event)=>{
-        console.log('teste')
-    }) */
     showModal('#image-editor')
     if(myImage.selectedFileinWE==''){
         document.querySelector('#filedialogimg').click()
