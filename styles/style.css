@@ -203,7 +203,7 @@ div.left, div.right{
 }
 #image-editor{
     width:fit-content;
-    height:min-content;
+    height:fit-content;
 }
 div#leftbuttons{
     padding: 0px 5px 0px 5px;
@@ -214,7 +214,7 @@ div#leftbuttons{
 div#imgpage{
     text-align: center;
     width:800px;
-    height: 600px;
+    height: 500px;
     display: inline;
 }
 #report ol>li{
@@ -265,8 +265,10 @@ div#imgpage{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 600px;
 }
+input[type='file'] {
+    display: none
+  }
 .longtext2, .longtext4{
     display:block;
     border: none;

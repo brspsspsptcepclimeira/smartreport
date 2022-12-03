@@ -7,6 +7,8 @@ export class Img{
         this.mouseUp = true
         this.decrease = false
         this.increase = false
+        this.selectedFileinWE = ''
+        this.fullImg = document.createElement('img')
     }
     set width(newWidth){
         this._width = newWidth
@@ -49,6 +51,19 @@ export class Img{
     get increase(){
         return this._increase
     }
+    set selectedFileinWE(newSelectedFileinWE){
+        this._selectedFileinWE = newSelectedFileinWE
+    }
+    get selectedFileinWE(){
+        return this._selectedFileinWE
+    }
+    set fullImg(newFullImg){
+        this._fullImg = newFullImg
+        //this.imgBase64.src = this._fullImg
+    }
+    get fullImg(){
+        return this._fullImg
+    }
 
     getMousePosition(event){
         let thisRectCanvas = this.canvas.getBoundingClientRect()
@@ -63,11 +78,11 @@ export class Img{
     }
     setMouseDown(event){
         this.mouseDown=true
-        console.log(event)
+        //console.log(event)
     }
     setMouseUp(event){
         this.resetAll()
-        console.log(event)
+        //console.log(event)
     }
     mouseClick(){
         //alert('clicou')
@@ -89,5 +104,28 @@ export class Img{
         this.mouseUp = false
         this.decrease = false
         this.increase = false
+    }
+    selecionarImagem(files){
+        if(files.length>0){
+            this.selectedFileinWE = files[0]
+            const readFile = new FileReader()
+            readFile.onload = (textImg)=>{
+                let imagemBase64 = textImg.target.result
+                this.fullImg.src = imagemBase64
+                let promise = new Promise(()=>{
+                    this.fullImg.onload = ()=>{
+                        this.width = this.fullImg.width
+                        this.proportion = this.fullImg.height/this.fullImg.width
+                        //this.height = this.fullImg.height
+                        //this.proportion = this.height/this.width
+                        console.log(`Insede the promise: ${this.width} x ${this.height}`)
+                    }
+                })
+            }    
+            readFile.readAsDataURL(this.selectedFileinWE)         
+            console.log(`Outside the promise: ${this.width} x ${this.height}`)
+        }else{
+            alert('Nenhuma Imagem selecionada.')
+        }
     }
 }

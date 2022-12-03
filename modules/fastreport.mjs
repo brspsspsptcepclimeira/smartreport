@@ -186,6 +186,7 @@ document.querySelector('#magic-veicle-estruct').addEventListener('click', ()=>{
         quillVeicle.root.innerHTML = `<h2>Descrição e Exame do Veículo</h2><p>Identificação ...</p><p>Placa de Identificação</p><p>Chassi</p><p>Motor</p><p>Localização e posição ...</p><p>Danos ...</p><p>Sistemas ...</p><p>Pneus ...</p>`
     }
 })
+document.querySelector('#img-close').addEventListener('click', ()=>{showModal('#form-conclusion')})
 document.querySelector('#magic-things-knife').addEventListener('click', ()=>{
     window.open('./pages/knife.html', 'janela', atributos)
 })
@@ -264,6 +265,7 @@ document.querySelector('#selectlocal').addEventListener('change', ()=>{
 
 
 export function showImageEditor(){
+    document.querySelector('#filedialogimg').addEventListener('change', ()=>{myImage.selecionarImagem(document.querySelector('#filedialogimg').files)})
     document.querySelector('#img-photo').addEventListener('click', ()=>{
         alert('mostrar imagem')
     }) 
@@ -279,10 +281,13 @@ export function showImageEditor(){
     myImage.canvas.addEventListener('click', ()=>{myImage.mouseClick()})
     myImage.canvas.addEventListener('mousedown', (event)=>{myImage.setMouseDown(event)})
     myImage.canvas.addEventListener('mouseup', (event)=>{myImage.setMouseUp(event)})
-    myImage.canvas.addEventListener('mousemove', (event)=>{
+   /*  myImage.canvas.addEventListener('mousemove', (event)=>{
         console.log('teste')
-    })
+    }) */
     showModal('#image-editor')
+    if(myImage.selectedFileinWE==''){
+        document.querySelector('#filedialogimg').click()
+    }
 }
 
 
