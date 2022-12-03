@@ -10,6 +10,11 @@ export class Img{
         this.selectedFileinWE = ''
         this.fullImg = document.createElement('img')
         this.currentImg = document.createElement('img')
+        this.cropX1 = 0
+        this.cropX2 = 0
+        this.cropY1 = 0
+        this.cropY2 = 0
+        this.crop = false
     }
     set width(newWidth){
         this._width = newWidth
@@ -18,10 +23,6 @@ export class Img{
     get width(){
         return this._width
     }
-    /* set height(newHeight){
-        this._height = newHeight
-        this._width = this._height/this.proportion
-    } */
     get height(){
         return this.__height
     }
@@ -72,25 +73,59 @@ export class Img{
     get fullImg(){
         return this._fullImg
     }
-
+    set crop(newCrop){
+        this._crop = newCrop
+    }
+    get crop(){
+        return this._crop
+    }
+    set cropX1(newCropX1){
+        this._cropX1 = newCropX1
+    }
+    get cropX1(){
+        return this._cropX1
+    }
+    set cropX2(newCropX2){
+        this._cropX2 = newCropX2
+    }
+    get cropX2(){
+        return this._cropX2
+    }
+    set cropY1(newCropY1){
+        this._cropY1 = newCropY1
+    }
+    get cropY1(){
+        return this._cropY1
+    }
+    set cropY2(newCropY2){
+        this._cropY2 = newCropY2
+    }
+    get cropY2(){
+        return this._cropY2
+    }
     getMousePosition(event){
         let thisRectCanvas = this.canvas.getBoundingClientRect()
-        let posX = event.clientX - thisRectCanvas.left
-        if(posX<10){
-            this.mouseDown = false
-        }
         return {
-            x: posX,
-            y: event.clientY - thisRectCanvas.top        
+            x: event.clientX - thisRectCanvas.left,
+            y: event.clientY - thisRectCanvas.top,        
         }
     }
     setMouseDown(event){
         this.mouseDown=true
-        //console.log(event)
+        if(this.crop){
+            this.cropX1=this.getMousePosition(event).x
+            this.cropY1=this.getMousePosition(event).y
+            //console.log(`${this.cropX1} - ${this.cropY1}`)
+        }
     }
     setMouseUp(event){
+        if(this.crop){
+            this.cropX2=this.getMousePosition(event).x
+            this.cropY2=this.getMousePosition(event).y
+            console.log(`${this.cropX1} - ${this.cropY1} - ${this.cropX2} - ${this.cropY2}`)
+            this.toCrop()
+        }
         this.resetAll()
-        //console.log(event)
     }
     mouseClick(){
         //alert('clicou')
@@ -100,7 +135,7 @@ export class Img{
             this.canvas.width=this.canvas.width-60
             this.canvas.height = this.canvas.width*this.proportion
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-            this.ctx.drawImage(this.fullImg, 0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
         }
     }
     toIncrease(){
@@ -108,7 +143,7 @@ export class Img{
             this.canvas.width=this.canvas.width+60
             this.canvas.height = this.canvas.width*this.proportion
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-            this.ctx.drawImage(this.fullImg, 0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
         }
     }
     resetAll(){
@@ -116,6 +151,7 @@ export class Img{
         this.mouseUp = false
         this.decrease = false
         this.increase = false
+        this.crop = false
     }
     selecionarImagem(files){
         if(files.length>0){
@@ -127,13 +163,18 @@ export class Img{
                 this.fullImg.src = imagemBase64
                 let promise = new Promise(()=>{
                     this.fullImg.onload = ()=>{
-                        this.width = this.fullImg.width
-                        this.proportion = this.fullImg.height/this.fullImg.width
-                        this.canvas.width = 700
-                        this.canvas.height = 700*this.proportion
+                        this.currentImg.src = this.fullImg.src
+                        this.width = this.currentImg.width
+                        this.proportion = this.currentImg.height/this.currentImg.width
+                        if(this.currentImg.width>700){
+                            this.canvas.width = 700
+                        }else{
+                            this.canvas.width = this.currentImg.width
+                        }                       
+                        this.canvas.height = this.canvas.width*this.proportion
                         this.toFit(this.canvas.width, this.canvas.height)
                         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-                        this.ctx.drawImage(this.fullImg, 0, 0, this.canvas.width, this.canvas.height)
+                        this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
                     }
                 })
             }    
@@ -147,6 +188,29 @@ export class Img{
             this.canvas.height = 450
             this.canvas.width = 450/this.proportion
         }
-        //console.log(`${x} - ${y} - ${this.proportion}`)
+    }
+    toCrop(){
+        let w = this.cropX2-this.cropX1
+        let h = this.cropY2-this.cropY1
+        let imgX = this.cropX1/this.canvas.width*this.currentImg.width
+        let imgY = this.cropY1/this.canvas.height*this.currentImg.height
+        let imgW = w/this.canvas.width*this.currentImg.width
+        let imgH = h/this.canvas.height*this.currentImg.height
+        this.proportion = h/w
+        this.canvas.width = 700
+        this.canvas.height = 700*this.proportion
+        this.toFit(this.canvas.width, this.canvas.height)
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.ctx.drawImage(this.currentImg, imgX, imgY, imgW, imgH, 0, 0, this.canvas.width, this.canvas.height)
+        this.currentImg.src = this.canvas.toDataURL()
+    }
+    toFullImg(){
+        this.proportion = this.fullImg.height/this.fullImg.width
+        this.currentImg.src=this.fullImg.src
+        this.canvas.width = 700
+        this.canvas.height = 700*this.proportion
+        this.toFit(this.canvas.width, this.canvas.height)
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
     }
 }

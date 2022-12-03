@@ -272,8 +272,8 @@ export function showImageEditor(){
     document.querySelector('#img-less').addEventListener('click', ()=>{
        myImage.toDecrease()
     }) 
-    //myImage.width = 700
-    //myImage.proportion = 0.6
+    document.querySelector('#img-crop').addEventListener('click', ()=>{myImage.crop=true})
+    document.querySelector('#img-full').addEventListener('click', ()=>{myImage.toFullImg()})
     myImage.mouseDown = false
     myImage.canvas.addEventListener('click', ()=>{myImage.mouseClick()})
     myImage.canvas.addEventListener('mousedown', (event)=>{myImage.setMouseDown(event)})
