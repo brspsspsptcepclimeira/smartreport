@@ -13,10 +13,17 @@ export class Img{
     }
     set width(newWidth){
         this._width = newWidth
-        this.__height = this.width*this.proportion
+        this.__height = this._width*this.proportion
     }
     get width(){
         return this._width
+    }
+    /* set height(newHeight){
+        this._height = newHeight
+        this._width = this._height/this.proportion
+    } */
+    get height(){
+        return this.__height
     }
     set proportion(newProportion){
         this._proportion = newProportion
@@ -24,9 +31,6 @@ export class Img{
     }
     get proportion(){
         return this._proportion
-    }
-    get height(){
-        return this.__height
     }
     set canvas(newCanvas){
         this._canvas = newCanvas
@@ -100,7 +104,7 @@ export class Img{
         }
     }
     toIncrease(){
-        if(this.canvas.width<700){
+        if(this.canvas.width<700 && this.canvas.height<450){
             this.canvas.width=this.canvas.width+60
             this.canvas.height = this.canvas.width*this.proportion
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -113,7 +117,7 @@ export class Img{
         this.decrease = false
         this.increase = false
     }
-    selecionarImagem(files, cvs){
+    selecionarImagem(files){
         if(files.length>0){
             //let ctx = cvs.getContext('2d')
             this.selectedFileinWE = files[0]
@@ -125,10 +129,11 @@ export class Img{
                     this.fullImg.onload = ()=>{
                         this.width = this.fullImg.width
                         this.proportion = this.fullImg.height/this.fullImg.width
-                        cvs.width = 700
-                        cvs.height = 700*this.proportion
-                        this.ctx.clearRect(0, 0, cvs.width, cvs.height)
-                        this.ctx.drawImage(this.fullImg, 0, 0, cvs.width, cvs.height)
+                        this.canvas.width = 700
+                        this.canvas.height = 700*this.proportion
+                        this.toFit(this.canvas.width, this.canvas.height)
+                        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+                        this.ctx.drawImage(this.fullImg, 0, 0, this.canvas.width, this.canvas.height)
                     }
                 })
             }    
@@ -136,5 +141,12 @@ export class Img{
         }else{
             alert('Nenhuma Imagem selecionada.')
         }
+    }
+    toFit(x, y){
+        if(y>400){
+            this.canvas.height = 450
+            this.canvas.width = 450/this.proportion
+        }
+        //console.log(`${x} - ${y} - ${this.proportion}`)
     }
 }

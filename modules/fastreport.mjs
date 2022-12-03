@@ -265,20 +265,15 @@ document.querySelector('#selectlocal').addEventListener('change', ()=>{
 
 
 export function showImageEditor(){
-    document.querySelector('#filedialogimg').addEventListener('change', ()=>{
-        myImage.selecionarImagem(document.querySelector('#filedialogimg').files, document.querySelector('#i-canvas'))
-    })
-    document.querySelector('#img-photo').addEventListener('click', ()=>{
-        alert('mostrar imagem')
-    }) 
+    document.querySelector('#filedialogimg').addEventListener('change', ()=>{myImage.selecionarImagem(document.querySelector('#filedialogimg').files)})
     document.querySelector('#img_more').addEventListener('click', ()=>{
         myImage.toIncrease()
     }) 
     document.querySelector('#img-less').addEventListener('click', ()=>{
        myImage.toDecrease()
     }) 
-    myImage.width = 700
-    myImage.proportion = 0.6
+    //myImage.width = 700
+    //myImage.proportion = 0.6
     myImage.mouseDown = false
     myImage.canvas.addEventListener('click', ()=>{myImage.mouseClick()})
     myImage.canvas.addEventListener('mousedown', (event)=>{myImage.setMouseDown(event)})
