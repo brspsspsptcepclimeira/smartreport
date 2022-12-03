@@ -186,7 +186,10 @@ document.querySelector('#magic-veicle-estruct').addEventListener('click', ()=>{
         quillVeicle.root.innerHTML = `<h2>Descrição e Exame do Veículo</h2><p>Identificação ...</p><p>Placa de Identificação</p><p>Chassi</p><p>Motor</p><p>Localização e posição ...</p><p>Danos ...</p><p>Sistemas ...</p><p>Pneus ...</p>`
     }
 })
-document.querySelector('#img-close').addEventListener('click', ()=>{showModal('#form-conclusion')})
+document.querySelector('#img-close').addEventListener('click', ()=>{
+    showModal(myImage.formCaller)
+    alert(myImage.formCaller)
+})
 document.querySelector('#magic-things-knife').addEventListener('click', ()=>{
     window.open('./pages/knife.html', 'janela', atributos)
 })
@@ -264,7 +267,8 @@ document.querySelector('#selectlocal').addEventListener('change', ()=>{
 
 
 
-export function showImageEditor(){
+export function showImageEditor(formCaller){
+    myImage.formCaller = formCaller
     document.querySelector('#filedialogimg').addEventListener('change', ()=>{myImage.selecionarImagem(document.querySelector('#filedialogimg').files)})
     document.querySelector('#img_more').addEventListener('click', ()=>{
         myImage.toIncrease()

@@ -15,6 +15,7 @@ export class Img{
         this.cropY1 = 0
         this.cropY2 = 0
         this.crop = false
+        this.formCaller = ''
     }
     set width(newWidth){
         this._width = newWidth
@@ -102,6 +103,12 @@ export class Img{
     }
     get cropY2(){
         return this._cropY2
+    }
+    set formCaller(newFormCaller){
+        this._formCaller = newFormCaller
+    }
+    get formCaller(){
+        return this._formCaller
     }
     getMousePosition(event){
         let thisRectCanvas = this.canvas.getBoundingClientRect()
