@@ -16,6 +16,8 @@ export class Img{
         this.cropY2 = 0
         this.crop = false
         this.formCaller = ''
+        this.indexText = 0
+        this.quillPanel
     }
     set width(newWidth){
         this._width = newWidth
@@ -109,6 +111,18 @@ export class Img{
     }
     get formCaller(){
         return this._formCaller
+    }
+    set indexText(newIndexText){
+        this._indexText = newIndexText
+    }
+    get indexText(){
+        return this._indexText
+    }
+    set quillPanel(newQuillPanel){
+        this._quillPanell = newQuillPanel
+    }
+    get quillPanel(){
+        return this._quillPanell
     }
     getMousePosition(event){
         let thisRectCanvas = this.canvas.getBoundingClientRect()

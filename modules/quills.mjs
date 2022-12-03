@@ -62,20 +62,28 @@ export let quillLocal = new Quill('#editorLocal', {
     toolbar: {
         container: toolbarOptionsImg,
             handlers:{image:function(){
-                showImageEditor('#form-local')
+                showImageEditor('#form-local', this.quill.getSelection().index ,this.quill)
             },
         }            
     }
 },
 theme: 'snow'
 });
+/* 
+                        previusForm = '#form-local'
+                        previusQuil = this.quill
+                        previusIndex = this.quill.getSelection().index
+
+ */
+
+
 //QUILL VEÍCULO
 export let quillVeicle = new Quill('#editorVeicle', {
   modules: {        
     toolbar: {
         container: toolbarOptionsImg,
             handlers:{image:function(){
-                showImageEditor('#form-veicle')
+                showImageEditor('#form-veicle', this.quill.getSelection().index ,this.quill)
             },
         }            
     }
@@ -88,7 +96,7 @@ export let quillThing = new Quill('#editorThing', {
     toolbar: {
         container: toolbarOptionsImg,
             handlers:{image:function(){
-                showImageEditor('#form-thing')
+                showImageEditor('#form-thing', this.quill.getSelection().index ,this.quill)
             },
         }            
     }
@@ -101,7 +109,7 @@ export let quillCorpuses = new Quill('#editorCorpuses', {
     toolbar: {
         container: toolbarOptionsImg,
             handlers:{image:function(){
-                showImageEditor('#form-corpuses')
+                showImageEditor('#form-corpuses', this.quill.getSelection().index ,this.quill)
             },
         }            
     }
@@ -114,7 +122,7 @@ export let quillConclusion = new Quill('#editorConclusion', {
       toolbar: {
           container: toolbarOptionsImg,
               handlers:{image:function(){
-                  showImageEditor('#form-conclusion')
+                  showImageEditor('#form-conclusion', this.quill.getSelection().index ,this.quill)
               },
           }            
       }

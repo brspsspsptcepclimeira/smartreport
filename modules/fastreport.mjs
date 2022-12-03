@@ -19,9 +19,9 @@ document.onload = ini()
 //************************************************* Variáveis Globias */
 const atributos = `width=660, height=${window.innerHeight}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
 //const ctx = myImage.canvas.getContext('2d')
-let previusForm = ''
-let previusQuil = ''
-let previusIndex = ''
+//export let previusForm = ''
+//export let previusQuil = ''
+//export let previusIndex = ''
 //************************************************* Menu
 document.querySelector('#menu-number').addEventListener('click', ()=>{showModal('#form-number-report', document.querySelector('#input-number-report'))})
 document.querySelector('#menu-preamble').addEventListener('click', ()=>{showModal('#form-preamble', document.querySelector('#input-delegate'))})
@@ -267,8 +267,10 @@ document.querySelector('#selectlocal').addEventListener('change', ()=>{
 
 
 
-export function showImageEditor(formCaller){
+export function showImageEditor(formCaller, indexText, quillPanel){
     myImage.formCaller = formCaller
+    myImage.indexText = indexText
+    myImage.quillPanel = quillPanel
     document.querySelector('#filedialogimg').addEventListener('change', ()=>{myImage.selecionarImagem(document.querySelector('#filedialogimg').files)})
     document.querySelector('#img_more').addEventListener('click', ()=>{
         myImage.toIncrease()
@@ -278,6 +280,9 @@ export function showImageEditor(formCaller){
     }) 
     document.querySelector('#img-crop').addEventListener('click', ()=>{myImage.crop=true})
     document.querySelector('#img-full').addEventListener('click', ()=>{myImage.toFullImg()})
+    document.querySelector('#img-send').addEventListener('click', ()=>{
+        addImgToform()
+    })
     myImage.mouseDown = false
     myImage.canvas.addEventListener('click', ()=>{myImage.mouseClick()})
     myImage.canvas.addEventListener('mousedown', (event)=>{myImage.setMouseDown(event)})
@@ -286,6 +291,31 @@ export function showImageEditor(formCaller){
     if(myImage.selectedFileinWE==''){
         document.querySelector('#filedialogimg').click()
     }
+}
+function addCaptionToImg(){
+    let caption = document.querySelector('#i-labelimg').value.trim()
+    if(caption==''){
+        caption='Imagem'
+    }
+    let position = myImage.indexText
+    let data = `[textodalegendaasersubstituido]`
+    myImage.quillPanel.clipboard.dangerouslyPasteHTML(position, data)
+    let textHTML1 = myImage.quillPanel.root.innerHTML
+    textHTML1 = textHTML1.replace(`[textodalegendaasersubstituido]`, `<p class="legenda">${caption}</p><P>`)
+    myImage.quillPanel.root.innerHTML = textHTML1
+}
+function addImgToform(){
+    if(myImage.formCaller =='' || myImage.quillPanel==''){
+        return
+    }
+    let dataURI = myImage.canvas.toDataURL()
+    myImage.quillPanel.insertText(myImage.indexText, '\n')
+    addCaptionToImg()
+    myImage.quillPanel.insertEmbed(myImage.indexText, 'image', dataURI)
+    showModal(myImage.formCaller)
+    myImage.quillPanel.focus()
+    myImage.quillPanel =''
+    myImage.formCaller = ''
 }
 
 
