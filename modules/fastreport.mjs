@@ -18,10 +18,6 @@ function ini(){
 document.onload = ini()
 //************************************************* Variáveis Globias */
 const atributos = `width=660, height=${window.innerHeight}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
-//const ctx = myImage.canvas.getContext('2d')
-//export let previusForm = ''
-//export let previusQuil = ''
-//export let previusIndex = ''
 //************************************************* Menu
 document.querySelector('#menu-number').addEventListener('click', ()=>{showModal('#form-number-report', document.querySelector('#input-number-report'))})
 document.querySelector('#menu-preamble').addEventListener('click', ()=>{showModal('#form-preamble', document.querySelector('#input-delegate'))})
@@ -172,7 +168,7 @@ document.querySelector('#magic-local-street').addEventListener('click', ()=>{
 })
 document.querySelector('#magic-local-estruct').addEventListener('click', ()=>{
     if(quillLocal.getText().trim()==''){
-        quillLocal.root.innerHTML = `<h2>Descrição e Exame do Local</h2><h3>Características do Local</h3><p></p><h3>Preservação</h3><p></p><h3>Exame</h3><p></p><p></p>`
+        quillLocal.root.innerHTML = `<h2>Descrição e Exame do Local</h2><h3>Características do Local</h3><h3>Preservação</h3><h3>Exame</h3>`
     }
 })
 document.querySelector('#magic-carchash').addEventListener('click', ()=>{
@@ -303,19 +299,23 @@ function addCaptionToImg(){
     let textHTML1 = myImage.quillPanel.root.innerHTML
     textHTML1 = textHTML1.replace(`[textodalegendaasersubstituido]`, `<p class="legenda">${caption}</p><P>`)
     myImage.quillPanel.root.innerHTML = textHTML1
+    return caption.length
 }
 function addImgToform(){
     if(myImage.formCaller =='' || myImage.quillPanel==''){
         return
     }
     let dataURI = myImage.canvas.toDataURL()
-    myImage.quillPanel.insertText(myImage.indexText, '\n')
-    addCaptionToImg()
+    //myImage.quillPanel.insertText(myImage.indexText, '\n')
+    let captionLength = addCaptionToImg()+3
     myImage.quillPanel.insertEmbed(myImage.indexText, 'image', dataURI)
-    showModal(myImage.formCaller)
+    let indexToFocus = myImage.indexText+captionLength
+    myImage.quillPanel.setSelection(indexToFocus, 0)
     myImage.quillPanel.focus()
+    showModal(myImage.formCaller)
     myImage.quillPanel =''
     myImage.formCaller = ''
+    //myImage.quillPanel.dispatchEvent('y')
 }
 
 
@@ -372,6 +372,9 @@ function writeToHTML(){
     }
     if(quillLocal.getText().length>20){
         statement += quillLocal.root.innerHTML
+    }
+    if(quillVeicle.getText().length>20){
+        statement += quillVeicle.root.innerHTML
     }
     if(quillThing.getText().length>20){
         statement += quillThing.root.innerHTML
