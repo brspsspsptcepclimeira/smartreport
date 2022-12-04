@@ -281,6 +281,9 @@ export function showImageEditor(formCaller, indexText, quillPanel){
     })
     myImage.mouseDown = false
     myImage.canvas.addEventListener('click', ()=>{myImage.mouseClick()})
+    myImage.canvas.addEventListener('mousemove', (event)=>{
+        myImage.setMouseMove(event)
+    })
     myImage.canvas.addEventListener('mousedown', (event)=>{myImage.setMouseDown(event)})
     myImage.canvas.addEventListener('mouseup', (event)=>{myImage.setMouseUp(event)})
     showModal('#image-editor')

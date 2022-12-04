@@ -131,6 +131,26 @@ export class Img{
             y: event.clientY - thisRectCanvas.top,        
         }
     }
+    setMouseMove(event){
+        if(this.mouseDown){
+            let rectW = 0
+            let rectH = 0
+            let posX = this.getMousePosition(event).x
+            let posY = this.getMousePosition(event).y
+            console.log(`${posX} - ${posY}`)
+            if(posX>this.canvas.width || posX<0 || posY>this.canvas.height || posY<0){
+                this.resetAll()
+                return
+            }
+            if(this.crop){
+                rectW = posX-this.cropX1
+                rectH = posY-this.cropY1
+                this.ctx.strokeStyle = "#ff0000"
+                this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
+                this.ctx.strokeRect(this.cropX1, this.cropY1, rectW, rectH);
+            }
+        }
+    }
     setMouseDown(event){
         this.mouseDown=true
         if(this.crop){
