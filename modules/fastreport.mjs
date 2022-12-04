@@ -269,11 +269,11 @@ export function showImageEditor(formCaller, indexText, quillPanel){
     myImage.quillPanel = quillPanel
     document.querySelector('#filedialogimg').addEventListener('change', ()=>{myImage.selecionarImagem(document.querySelector('#filedialogimg').files)})
     document.querySelector('#img_more').addEventListener('click', ()=>{
-        myImage.toIncrease()
+        myImage.resize = true
     }) 
-    document.querySelector('#img-less').addEventListener('click', ()=>{
+    /* document.querySelector('#img-less').addEventListener('click', ()=>{
        myImage.toDecrease()
-    }) 
+    })  */
     document.querySelector('#img-crop').addEventListener('click', ()=>{myImage.crop=true})
     document.querySelector('#img-full').addEventListener('click', ()=>{myImage.toFullImg()})
     document.querySelector('#img-send').addEventListener('click', ()=>{

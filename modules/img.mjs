@@ -5,8 +5,7 @@ export class Img{
         this.proportion = 0
         this.mouseDown = false
         this.mouseUp = true
-        this.decrease = false
-        this.increase = false
+        this.resize = false
         this.selectedFileinWE = ''
         this.fullImg = document.createElement('img')
         this.currentImg = document.createElement('img')
@@ -14,6 +13,7 @@ export class Img{
         this.cropX2 = 0
         this.cropY1 = 0
         this.cropY2 = 0
+        this.lastMousePopsition = 0
         this.crop = false
         this.formCaller = ''
         this.indexText = 0
@@ -46,22 +46,11 @@ export class Img{
         return this.canvas.getContext('2d')
     }
     set mouseDown(newMouseDown){
+        this.counter = 0
         this._mouseDown = newMouseDown
     }
     get mouseDown(){
         return this._mouseDown
-    }
-    set decrease(newDecrease){
-        this._decrease = newDecrease
-    }
-    get decrease(){
-        return this._decrease
-    }
-    set increase(newIncrease){
-        this._increasee = newIncrease
-    }
-    get increase(){
-        return this._increase
     }
     set selectedFileinWE(newSelectedFileinWE){
         this._selectedFileinWE = newSelectedFileinWE
@@ -124,11 +113,24 @@ export class Img{
     get quillPanel(){
         return this._quillPanell
     }
+    set lastMousePopsition(newLastMousePosition){
+        this._lastMousePOsition = newLastMousePosition
+    }
+    get lastMousePopsition(){
+        return this._lastMousePOsition
+    }
+    set resize(newResize){
+        this._resize = newResize
+    }
+    get resize(){
+        return this._resize
+    }
     getMousePosition(event){
         let thisRectCanvas = this.canvas.getBoundingClientRect()
         return {
             x: event.clientX - thisRectCanvas.left,
-            y: event.clientY - thisRectCanvas.top,        
+            y: event.clientY - thisRectCanvas.top, 
+            X: event.clientX,       
         }
     }
     setMouseMove(event){
@@ -137,15 +139,29 @@ export class Img{
             let rectH = 0
             let posX = this.getMousePosition(event).x
             let posY = this.getMousePosition(event).y
-            console.log(`${posX} - ${posY}`)
+            //console.log(`${posX} - ${posY}`)
             if(posX>this.canvas.width || posX<0 || posY>this.canvas.height || posY<0){
                 this.resetAll()
                 return
+            }
+            if(this.resize){
+                this.counter++
+                if(posX>this.lastMousePopsition-1){
+                    this.toIncrease()
+                }else if ((posX<this.lastMousePopsition+1)){
+                    this.toDecrease()
+                }
+            console.log(`${posX} - ${this.lastMousePopsition}`) 
+            if(this.counter>5){
+                this.lastMousePopsition = posX
+                this.counter = 0
+                }
             }
             if(this.crop){
                 rectW = posX-this.cropX1
                 rectH = posY-this.cropY1
                 this.ctx.strokeStyle = "#ff0000"
+                this.ctx.setLineDash([4, 2])
                 this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
                 this.ctx.strokeRect(this.cropX1, this.cropY1, rectW, rectH);
             }
@@ -154,6 +170,7 @@ export class Img{
     setMouseDown(event){
         this.mouseDown=true
         if(this.crop){
+            this.lastMousePopsition = this.getMousePosition(event).X
             this.cropX1=this.getMousePosition(event).x
             this.cropY1=this.getMousePosition(event).y
             //console.log(`${this.cropX1} - ${this.cropY1}`)
@@ -172,8 +189,8 @@ export class Img{
         //alert('clicou')
     }
     toDecrease(){
-        if(this.canvas.width>100){
-            this.canvas.width=this.canvas.width-60
+        if(this.canvas.width>200){
+            this.canvas.width=this.canvas.width-1
             this.canvas.height = this.canvas.width*this.proportion
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
@@ -181,7 +198,7 @@ export class Img{
     }
     toIncrease(){
         if(this.canvas.width<700 && this.canvas.height<450){
-            this.canvas.width=this.canvas.width+60
+            this.canvas.width=this.canvas.width+1
             this.canvas.height = this.canvas.width*this.proportion
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
@@ -190,8 +207,7 @@ export class Img{
     resetAll(){
         this.mouseDown = false
         this.mouseUp = false
-        this.decrease = false
-        this.increase = false
+        this.resize = false
         this.crop = false
     }
     selecionarImagem(files){
@@ -226,8 +242,8 @@ export class Img{
     }
     toFit(x, y){
         if(y>400){
-            this.canvas.height = 450
-            this.canvas.width = 450/this.proportion
+            this.canvas.height = 400
+            this.canvas.width = 400/this.proportion
         }
     }
     toCrop(){
