@@ -6,6 +6,7 @@ import { quillObjective, quillQuestions, quillHistoric, quillInforms, quillLocal
 const report = new Report('0')
 const myImage = new Img
 myImage.canvas = document.querySelector('#i-canvas')
+myImage.currentIndex = 0
 function ini(){
     document.querySelector('#input-designated-date').value = todayDate('Sun May 11,2014')
     document.querySelector('#input-execution-date').value = todayDate()+'T12:00'
@@ -274,6 +275,9 @@ export function showImageEditor(formCaller, indexText, quillPanel){
     document.querySelector('#img-less').addEventListener('click', ()=>{
        myImage.elipse=true
     }) 
+    document.querySelector('#img-up').addEventListener('click', ()=>{myImage.changeImg(true, false)})
+    document.querySelector('#img-down').addEventListener('click', ()=>{myImage.changeImg(false, true)})
+    document.querySelector('#img-arrow').addEventListener('click', ()=>{myImage.line = true})
     document.querySelector('#img-crop').addEventListener('click', ()=>{myImage.crop=true})
     document.querySelector('#img-full').addEventListener('click', ()=>{myImage.toFullImg()})
     document.querySelector('#img-color-line').addEventListener('change', ()=>{

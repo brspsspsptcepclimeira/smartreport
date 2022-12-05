@@ -37,8 +37,17 @@ article > table{
 article > table > tfoot{
     bottom: 3rem;
 }
+#canvas-container{
+    text-align: center;
+    width: 820px;
+    height: 600px;
+    overflow-y: scroll;
+}
 canvas{
-    border: 3px solid green;
+    border: 1px solid rgb(0,0,0);    
+}
+.midle-canvas{
+    margin-left: 50px;
 }
 textarea{
     padding: 1rem;
@@ -202,12 +211,15 @@ div.left, div.right{
     width: fit-content;
 }
 #image-editor{
-    width:fit-content;
-    height:fit-content;
+    width:100wv;
+    height: fit-content;
+    max-height:1600px;
+
 }
 div#leftbuttons{
+    position:fixed;
     padding: 0px 5px 0px 5px;
-    width:60px;
+    width:50px;
     height: 80%;
     float:left;
 }
@@ -370,7 +382,7 @@ div.level-button, div.level-top{
     transform: translate(-50%, -50%);
     opacity: 0;
     pointer-events: none;
-    max-height: 680px;
+    max-height: 400px;
 }
 .modal-header{
     display: flex;

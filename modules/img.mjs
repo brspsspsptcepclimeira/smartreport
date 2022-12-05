@@ -20,6 +20,9 @@ export class Img{
         this.formCaller = ''
         this.indexText = 0
         this.quillPanel
+        this.imgList = []
+        this.currentIndex = 0
+        this.line = false
     }
     set width(newWidth){
         this._width = newWidth
@@ -66,6 +69,12 @@ export class Img{
     }
     get fullImg(){
         return this._fullImg
+    }
+    set currentImg(newCurrentImg){
+        this._currentImg = newCurrentImg
+    }
+    get currentImg(){
+        return this._currentImg
     }
     set colorLine(newColorLine){
         this._colorLine = newColorLine
@@ -139,6 +148,18 @@ export class Img{
     get resize(){
         return this._resize
     }
+    set currentIndex(newCurrentIndex){
+        this._currenteIndex = newCurrentIndex
+    }
+    get currentIndex(){
+        return this._currenteIndex
+    }
+    set line(newLine){
+        this._line = newLine
+    }
+    get line(){
+        return this._line
+    }
     getMousePosition(event){
         let thisRectCanvas = this.canvas.getBoundingClientRect()
         return {
@@ -178,7 +199,6 @@ export class Img{
                 this.ctx.setLineDash([4, 2])
                 this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
                 this.ctx.strokeRect(this.cropX1, this.cropY1, rectW, rectH);
-                //this.currentImg = this.canvas.toDataURL()
             }
             if(this.elipse){
                 rectW = posX-this.cropX1
@@ -188,11 +208,23 @@ export class Img{
                 this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
                 this.drawEllipse(this.ctx, this.cropX1, this.cropY1, rectW, rectH)
             }
+            if(this.line){
+                let x0 = this.cropX1
+                let y0 = this.cropY1
+                this.ctx.strokeStyle = this.colorLine
+                this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
+                this.ctx.beginPath();
+                this.ctx.moveTo(x0, y0);
+                this.ctx.lineTo(posX, posY)
+                this.ctx.stroke()
+                console.log(`${x0} - ${y0} - ${posX} - ${posY}`)
+                //this.drawArrow(x0, y0, this.posX, this.posY, 3)
+            }
         }
     }
     setMouseDown(event){
         this.mouseDown=true
-        if(this.crop || this.elipse){
+        if(this.crop || this.elipse || this.line){
             this.lastMousePopsition = this.getMousePosition(event).X
             this.cropX1=this.getMousePosition(event).x
             this.cropY1=this.getMousePosition(event).y
@@ -203,11 +235,13 @@ export class Img{
         if(this.crop){
             this.cropX2=this.getMousePosition(event).x
             this.cropY2=this.getMousePosition(event).y
-            console.log(`${this.cropX1} - ${this.cropY1} - ${this.cropX2} - ${this.cropY2}`)
+            //console.log(`${this.cropX1} - ${this.cropY1} - ${this.cropX2} - ${this.cropY2}`)
             this.toCrop()
         }
-        if(this.elipse){
+        if(this.crop || this.elipse || this.line){
             this.currentImg.src = this.canvas.toDataURL()
+            this.imgList.push(this.currentImg.src)
+            this.currentIndex = this.imgList.length-1
         }
         this.resetAll()
     }
@@ -236,10 +270,11 @@ export class Img{
         this.resize = false
         this.crop = false
         this.elipse = false
+        this.line = false
     }
     selecionarImagem(files){
         if(files.length>0){
-            //let ctx = cvs.getContext('2d')
+            this.imgList=[]
             this.selectedFileinWE = files[0]
             const readFile = new FileReader()
             readFile.onload = (textImg)=>{
@@ -247,7 +282,9 @@ export class Img{
                 this.fullImg.src = imagemBase64
                 let promise = new Promise(()=>{
                     this.fullImg.onload = ()=>{
-                        this.currentImg.src = this.fullImg.src
+                        this.imgList.push(this.fullImg.src)
+                        this.currentIndex =0
+                        this.currentImg.src = this.imgList[this.currentIndex]
                         this.width = this.currentImg.width
                         this.proportion = this.currentImg.height/this.currentImg.width
                         if(this.currentImg.width>700){
@@ -261,16 +298,16 @@ export class Img{
                         this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
                     }
                 })
-            }    
-            readFile.readAsDataURL(this.selectedFileinWE)         
+            } 
+            readFile.readAsDataURL(this.selectedFileinWE)      
         }else{
             alert('Nenhuma Imagem selecionada.')
         }
     }
     toFit(x, y){
-        if(y>400){
-            this.canvas.height = 400
-            this.canvas.width = 400/this.proportion
+        if(y>800){
+            this.canvas.height = 800
+            this.canvas.width = 800/this.proportion
         }
     }
     toCrop(){
@@ -315,4 +352,71 @@ export class Img{
         //ctx.closePath(); // not used correctly, see comments (use to close off open path)
         ctx.stroke();
       }
+      drawLine(){
+        if(this.line){
+            let x0 = this.cropX1
+            let y0 = this.cropY1
+            console.log(`${x0} - ${y0}`)
+        }        
+      }
+    changeImg(up, down){
+        const max = this.imgList.length-1
+        if(!up && !down){
+            console.log(`Retornando: Índice atual = ${this.currentIndex} de ${max} elementos.`)
+            return
+        }
+        if(up && (0<=this.currentIndex && this.currentIndex<max)){
+            this.currentIndex++
+            console.log(`Subindo: Índice atual = ${this.currentIndex} de ${max} elementos.`)
+        }else if(down && (this.currentIndex>0)){
+            this.currentIndex--
+            console.log(`Descendo: Índice atual = ${this.currentIndex} de ${max} elementos.`)            
+        }
+        this.currentImg.src = this.imgList[this.currentIndex]
+        this.proportion = this.currentImg.height/this.currentImg.width
+        this.canvas.width = 700
+        this.canvas.height = 700*this.proportion
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.toFit(this.canvas.width, this.canvas.height)
+        this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
+    }
+   /*  drawArrow(fromx, fromy, tox, toy, arrowWidth){
+        //variables to be used when creating the arrow
+        var headlen = 10;
+        var angle = Math.atan2(toy-fromy,tox-fromx);
+     
+        //this.ctx.save();
+        this.ctx.strokeStyle = this.colorLine;
+        this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
+        //starting path of the arrow from the start square to the end square
+        //and drawing the stroke
+        this.ctx.beginPath();
+        this.ctx.moveTo(fromx, fromy);
+        this.ctx.lineTo(tox, toy);
+        this.ctx.lineWidth = arrowWidth;
+        this.ctx.stroke();
+     
+        //starting a new path from the head of the arrow to one of the sides of
+        //the point
+        this.ctx.beginPath();
+        this.ctx.moveTo(tox, toy);
+        this.ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
+                   toy-headlen*Math.sin(angle-Math.PI/7));
+     
+        //path from the side point of the arrow, to the other side point
+        this.ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),
+                   toy-headlen*Math.sin(angle+Math.PI/7));
+     
+        //path from the side point back to the tip of the arrow, and then
+        //again to the opposite side point
+        this.ctx.lineTo(tox, toy);
+        this.ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
+                   toy-headlen*Math.sin(angle-Math.PI/7));
+     
+        //draws the paths created above
+        this.ctx.stroke();
+        this.ctx.restore();
+        console.log('certo')
+    } */
+
 }
