@@ -14,7 +14,9 @@ export class Img{
         this.cropY1 = 0
         this.cropY2 = 0
         this.lastMousePopsition = 0
+        this.colorLine = '#000000'
         this.crop = false
+        this.elipse = false
         this.formCaller = ''
         this.indexText = 0
         this.quillPanel
@@ -65,11 +67,23 @@ export class Img{
     get fullImg(){
         return this._fullImg
     }
+    set colorLine(newColorLine){
+        this._colorLine = newColorLine
+    }
+    get colorLine(){
+        return this._colorLine
+    }
     set crop(newCrop){
         this._crop = newCrop
     }
     get crop(){
         return this._crop
+    }
+    set elipse(newElipse){
+        this._elipse = newElipse
+    }
+    get elipse(){
+        return this._elipse
     }
     set cropX1(newCropX1){
         this._cropX1 = newCropX1
@@ -160,16 +174,24 @@ export class Img{
             if(this.crop){
                 rectW = posX-this.cropX1
                 rectH = posY-this.cropY1
-                this.ctx.strokeStyle = "#ff0000"
+                this.ctx.strokeStyle = '#aa2210'
                 this.ctx.setLineDash([4, 2])
                 this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
                 this.ctx.strokeRect(this.cropX1, this.cropY1, rectW, rectH);
+            }
+            if(this.elipse){
+                rectW = posX-this.cropX1
+                rectH = posY-this.cropY1
+                this.ctx.strokeStyle = this.colorLine
+                this.ctx.setLineDash([4, 2])
+                this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
+                this.drawEllipse(this.ctx, this.cropX1, this.cropY1, rectW, rectH)
             }
         }
     }
     setMouseDown(event){
         this.mouseDown=true
-        if(this.crop){
+        if(this.crop || this.elipse){
             this.lastMousePopsition = this.getMousePosition(event).X
             this.cropX1=this.getMousePosition(event).x
             this.cropY1=this.getMousePosition(event).y
@@ -209,6 +231,7 @@ export class Img{
         this.mouseUp = false
         this.resize = false
         this.crop = false
+        this.elipse = false
     }
     selecionarImagem(files){
         if(files.length>0){
@@ -270,4 +293,22 @@ export class Img{
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
     }
+    drawEllipse(ctx, x, y, w, h) {
+        var kappa = .5522848,
+            ox = (w / 2) * kappa, // control point offset horizontal
+            oy = (h / 2) * kappa, // control point offset vertical
+            xe = x + w,           // x-end
+            ye = y + h,           // y-end
+            xm = x + w / 2,       // x-middle
+            ym = y + h / 2;       // y-middle
+      
+        ctx.beginPath();
+        ctx.moveTo(x, ym);
+        ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+        ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+        ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+        ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+        //ctx.closePath(); // not used correctly, see comments (use to close off open path)
+        ctx.stroke();
+      }
 }

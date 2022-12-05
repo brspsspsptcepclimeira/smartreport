@@ -271,11 +271,14 @@ export function showImageEditor(formCaller, indexText, quillPanel){
     document.querySelector('#img_more').addEventListener('click', ()=>{
         myImage.resize = true
     }) 
-    /* document.querySelector('#img-less').addEventListener('click', ()=>{
-       myImage.toDecrease()
-    })  */
+    document.querySelector('#img-less').addEventListener('click', ()=>{
+       myImage.elipse=true
+    }) 
     document.querySelector('#img-crop').addEventListener('click', ()=>{myImage.crop=true})
     document.querySelector('#img-full').addEventListener('click', ()=>{myImage.toFullImg()})
+    document.querySelector('#img-color-line').addEventListener('change', ()=>{
+        myImage.colorLine = document.querySelector('#img-color-line').value
+    })
     document.querySelector('#img-send').addEventListener('click', ()=>{
         addImgToform()
     })
