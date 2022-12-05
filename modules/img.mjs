@@ -178,6 +178,7 @@ export class Img{
                 this.ctx.setLineDash([4, 2])
                 this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
                 this.ctx.strokeRect(this.cropX1, this.cropY1, rectW, rectH);
+                //this.currentImg = this.canvas.toDataURL()
             }
             if(this.elipse){
                 rectW = posX-this.cropX1
@@ -204,6 +205,9 @@ export class Img{
             this.cropY2=this.getMousePosition(event).y
             console.log(`${this.cropX1} - ${this.cropY1} - ${this.cropX2} - ${this.cropY2}`)
             this.toCrop()
+        }
+        if(this.elipse){
+            this.currentImg.src = this.canvas.toDataURL()
         }
         this.resetAll()
     }
