@@ -425,6 +425,13 @@ input[type='text'], .modal input[type='date'], .modal input[type='checkbox'], .m
     border-bottom: 1px solid rgb(14, 4, 155);
     line-height: 1.5rem;
 }
+.numbertitle{
+    font-size: 0.9rem;
+}
+.modal input:focus{
+    outline: none;
+    background-color: rgba(127, 255, 212, 0.411);
+}
 .submodal input[type='text'], .submodal input[type='date'], .submodal input[type='checkbox'], .submodal input[type='datetime-local']{
     border-top: none;
     border-right: none;

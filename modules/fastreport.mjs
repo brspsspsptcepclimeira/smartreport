@@ -33,6 +33,7 @@ document.querySelector('#menu-conclusion').addEventListener('click', ()=>{
     toConclusion()
     showModal('#form-conclusion')
 })
+document.querySelector('#menu-numerar').addEventListener('click', ()=>{listar()})
 document.querySelector('#menu-print').addEventListener('click', ()=>{print()})
 //************************************************* Botões das Janelas */
 document.querySelectorAll('.btn-close').forEach(element=>{
@@ -103,6 +104,15 @@ document.querySelector('#magic-number').addEventListener('click', ()=>{
     report.number = document.querySelector('#input-number-report').value
     report.designatedDate = document.querySelector('#input-designated-date').value
     document.querySelector('#editor-number').value = report.writeFullReportNumber()
+})
+document.querySelector('#input-number-report').addEventListener('keyup', (e)=>{
+    let key = e.which || e.keyCode;
+        if(key=='13'){
+            document.querySelector('#magic-number').click()
+        }
+})
+document.querySelector('#input-designated-date').addEventListener('change', ()=>{
+    document.querySelector('#magic-number').click()
 })
 document.querySelector('#toolbar-preamble-magic').addEventListener('click', ()=>{
     report.city = document.querySelector('#input-city-epc').value
@@ -208,6 +218,15 @@ document.querySelector('#magic-corpuses').addEventListener('click', ()=>{
     }
     window.open('./pages/corpuses.html', 'janela', atributos)
 })
+//************************* Caixas de Seleção */
+document.querySelector('#select-director').addEventListener('change', ()=>{document.querySelector('#input-director').focus()})
+document.querySelector('#select-expert').addEventListener('change', ()=>{document.querySelector('#input-expert').focus()})
+document.querySelector('#select-delegate').addEventListener('change', ()=>{document.querySelector('#input-delegate').focus()})
+document.querySelector('#selectrdo').addEventListener('change', ()=>{document.querySelector('#irdo').focus()})
+document.querySelector('#select-ftp').addEventListener('change', ()=>{document.querySelector('#iftp').focus()})
+document.querySelector('#selectguarnicao').addEventListener('change', ()=>{document.querySelector('#iguarnicaopatente').focus()})
+document.querySelector('#selectlocal').addEventListener('change', ()=>{document.querySelector('#ilocaltype').focus()})
+//document.querySelector('#select-ftp').addEventListener('change', ()=>{document.querySelector('#iftp').focus()})
 //************************* Texto para Conclusão */
 function toConclusion(){
     if(quillConclusion.getText().trim()!=''){
@@ -419,7 +438,10 @@ function writeToHTML(){
     if(quillConclusion.getText().length>20){
         statement += quillConclusion.root.innerHTML
     }
+    //statement = statement.replaceAll('<p><br></p>', '')
     document.querySelector('#report').innerHTML = statement.replaceAll('<p><br></p>', '')
+    numerarImage()
+    listar()
 }    
 //********************** Exibe Janela de Edição */
 export function showModal(element_, withfocus=''){
@@ -476,3 +498,30 @@ function hideSubModal(element_){
             previusForm = ''
         }
     }
+function numerarImage(){
+    let imgIndex = 1
+    let im = document.querySelectorAll('#report>.legenda')    
+    im.forEach(elementImg=>{
+        elementImg.innerHTML=`Figura ${imgIndex} - ${elementImg.textContent}`
+        imgIndex++
+        })
+}
+function listar(){
+    let n2 = 1
+    let n3 = 1
+    let div = document.querySelector('#report')
+    for(let i=0; i<div.children.length; i++){
+        let element = div.children[i]
+        if(element.tagName=='H2'){
+            element.innerHTML = `<span class='numbertitle'>${n2}.</span> ${element.textContent}`
+            n2++
+            n3 = 1
+        }
+        if(element.tagName=='H3'){
+            element.innerHTML = `<span class='numbertitle'>${n2-1}.${n3}.</span> ${element.textContent}`
+            n3++
+        }
+        //console.log(div.children[i].tagName)
+    }
+    
+}
