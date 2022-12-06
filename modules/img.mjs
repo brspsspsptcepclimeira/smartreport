@@ -23,6 +23,8 @@ export class Img{
         this.imgList = []
         this.currentIndex = 0
         this.line = false
+        this.marck = false
+        this.marckNumber = 1
     }
     set width(newWidth){
         this._width = newWidth
@@ -160,6 +162,18 @@ export class Img{
     get line(){
         return this._line
     }
+    set marck(newMarck){
+        this._marck = newMarck
+    }
+    get marck(){
+        return this._marck
+    }
+    set marckNumber(newMarckNumber){
+        this._marckNumber = newMarckNumber
+    }
+    get marckNumber(){
+        return this._marckNumber
+    }
     getMousePosition(event){
         let thisRectCanvas = this.canvas.getBoundingClientRect()
         return {
@@ -232,21 +246,36 @@ export class Img{
         }
     }
     setMouseUp(event){
+        this.cropX2=this.getMousePosition(event).x
+        this.cropY2=this.getMousePosition(event).y
         if(this.crop){
-            this.cropX2=this.getMousePosition(event).x
-            this.cropY2=this.getMousePosition(event).y
-            //console.log(`${this.cropX1} - ${this.cropY1} - ${this.cropX2} - ${this.cropY2}`)
             this.toCrop()
         }
-        if(this.crop || this.elipse || this.line){
+        if(this.line){
+            this.drawArrow(this.cropX2, this.cropY2, this.cropX1, this.cropY1, 2)
+        }
+        if(this.marck){
+            this.ctx.fillStyle = this.colorLine;
+            this.ctx.font = '12pt Arial';
+            this.ctx.textAlign = "center"
+            this.ctx.fillText(this.marckNumber, this.cropX2, this.cropY2);
+            this.marckNumber++
+        }
+        if(this.crop || this.elipse || this.line || this.marck){
             this.currentImg.src = this.canvas.toDataURL()
             this.imgList.push(this.currentImg.src)
             this.currentIndex = this.imgList.length-1
         }
         this.resetAll()
     }
-    mouseClick(){
-        //alert('clicou')
+    mouseClick(event){
+        /* this.cropX1=this.getMousePosition(event).x
+        this.cropY1=this.getMousePosition(event).y
+        if(this.marck){
+            this.ctx.font = '48px serif';
+            this.ctx.fillText('Hello world', posX, posY);
+            this.marck = false
+        } */
     }
     toDecrease(){
         if(this.canvas.width>200){
@@ -271,6 +300,7 @@ export class Img{
         this.crop = false
         this.elipse = false
         this.line = false
+        this.marck = false
     }
     selecionarImagem(files){
         if(files.length>0){
@@ -287,13 +317,14 @@ export class Img{
                         this.currentImg.src = this.imgList[this.currentIndex]
                         this.width = this.currentImg.width
                         this.proportion = this.currentImg.height/this.currentImg.width
-                        if(this.currentImg.width>700){
+                        /* if(this.currentImg.width>700){
                             this.canvas.width = 700
                         }else{
                             this.canvas.width = this.currentImg.width
-                        }                       
-                        this.canvas.height = this.canvas.width*this.proportion
+                        }                        
+                        this.canvas.height = this.canvas.width*this.proportion*/
                         this.toFit(this.canvas.width, this.canvas.height)
+                        this.canvas.height = this.canvas.width*this.proportion
                         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
                         this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
                     }
@@ -305,10 +336,18 @@ export class Img{
         }
     }
     toFit(x, y){
-        if(y>800){
-            this.canvas.height = 800
-            this.canvas.width = 800/this.proportion
+        let thisX = x
+        let thisY = y
+        while(thisY>1000){
+            thisX--
+            thisY = thisX*this.proportion
         }
+        this.canvas.width=thisX
+        this.canvas.height=thisY
+        /* if(y>1000){
+            this.canvas.height = 1000
+            this.canvas.width = 1000/this.proportion
+        } */
     }
     toCrop(){
         let w = this.cropX2-this.cropX1
@@ -380,7 +419,7 @@ export class Img{
         this.toFit(this.canvas.width, this.canvas.height)
         this.ctx.drawImage(this.currentImg, 0, 0, this.canvas.width, this.canvas.height)
     }
-   /*  drawArrow(fromx, fromy, tox, toy, arrowWidth){
+    drawArrow(fromx, fromy, tox, toy, arrowWidth){
         //variables to be used when creating the arrow
         var headlen = 10;
         var angle = Math.atan2(toy-fromy,tox-fromx);
@@ -417,6 +456,5 @@ export class Img{
         this.ctx.stroke();
         this.ctx.restore();
         console.log('certo')
-    } */
-
+    }
 }

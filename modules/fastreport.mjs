@@ -278,6 +278,7 @@ export function showImageEditor(formCaller, indexText, quillPanel){
     document.querySelector('#img-up').addEventListener('click', ()=>{myImage.changeImg(true, false)})
     document.querySelector('#img-down').addEventListener('click', ()=>{myImage.changeImg(false, true)})
     document.querySelector('#img-arrow').addEventListener('click', ()=>{myImage.line = true})
+    document.querySelector('#img-marck').addEventListener('click', (event)=>{myImage.marck = true})
     document.querySelector('#img-crop').addEventListener('click', ()=>{myImage.crop=true})
     document.querySelector('#img-full').addEventListener('click', ()=>{myImage.toFullImg()})
     document.querySelector('#img-color-line').addEventListener('change', ()=>{
