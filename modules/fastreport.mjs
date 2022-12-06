@@ -160,6 +160,7 @@ document.querySelector('#magic-local-house').addEventListener('click', ()=>{
         quillLocal.root.innerHTML = `<h2>Descrição e Exame do Local</h2><h3>Características do Local</h3><p></p><h3>Exame</h3><p></p><p></p>`
     }
     window.open('./pages/imoveis.html', 'janela', atributos)
+    
 })
 document.querySelector('#magic-local-street').addEventListener('click', ()=>{
     if(quillLocal.getText().trim()==''){
@@ -222,11 +223,11 @@ function toConclusion(){
     }
     statement += `<p>Este laudo segue assinado digitalmente e encontra-se arquivado no sistema GDL da Superintendência da Polícia Técnico Científica do Estado de São Paulo.</p>`
     if(document.querySelector('#check-signature').checked){
-        statement += `<p class='signature-expert'>${report.expert}</p>`
+        statement += `<p id='signature-expert'>${report.expert}</p>`
         if(report.expertGender==1){
-            statement += `<p class='signature-label'>Perita Criminal</p>`
+            statement += `<p class='signature-label-name' id='signature-label'>Perita Criminal</p>`
         }else{
-            statement += `<p class='signature-label'>Perito Criminal</p>`
+            statement += `<p class='signature-label' id='signature-label'>Perito Criminal</p>`
         }
     }
     quillConclusion.root.innerHTML = statement
@@ -268,6 +269,7 @@ export function showImageEditor(formCaller, indexText, quillPanel){
     myImage.formCaller = formCaller
     myImage.indexText = indexText
     myImage.quillPanel = quillPanel
+    myImage.colorLine = document.querySelector('#img-color-line').value
     document.querySelector('#filedialogimg').addEventListener('change', ()=>{myImage.selecionarImagem(document.querySelector('#filedialogimg').files)})
     document.querySelector('#img_more').addEventListener('click', ()=>{
         myImage.resize = true
@@ -275,10 +277,31 @@ export function showImageEditor(formCaller, indexText, quillPanel){
     document.querySelector('#img-less').addEventListener('click', ()=>{
        myImage.elipse=true
     }) 
+    document.querySelector('#i-canvas').addEventListener('dblclick', (event)=>{
+        let x = myImage.getMousePosition(event).x
+        let y = myImage.getMousePosition(event).y
+        let legenda = document.querySelector('#canvas-label')
+        legenda.value = ''
+        legenda.style.display='block'
+        legenda.style.left=`${x}px`
+        legenda.style.top=`${y}px`
+        legenda.style.color = myImage.colorLine
+        legenda.focus()
+    })
+    document.querySelector('#canvas-label').addEventListener('keyup', (e)=>{
+        let key = e.which || e.keyCode;
+        if(key=='13'){
+            let legenda = document.querySelector('#canvas-label')
+            myImage.marck = true
+            myImage.toWrite(legenda.value.trim())
+            legenda.value = ''
+            legenda.style.display = 'none'
+        }
+    })
     document.querySelector('#img-up').addEventListener('click', ()=>{myImage.changeImg(true, false)})
     document.querySelector('#img-down').addEventListener('click', ()=>{myImage.changeImg(false, true)})
     document.querySelector('#img-arrow').addEventListener('click', ()=>{myImage.line = true})
-    document.querySelector('#img-marck').addEventListener('click', (event)=>{myImage.marck = true})
+    //document.querySelector('#img-marck').addEventListener('click', (event)=>{myImage.marck = true})
     document.querySelector('#img-crop').addEventListener('click', ()=>{myImage.crop=true})
     document.querySelector('#img-full').addEventListener('click', ()=>{myImage.toFullImg()})
     document.querySelector('#img-color-line').addEventListener('change', ()=>{

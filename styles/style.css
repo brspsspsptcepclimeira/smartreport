@@ -37,6 +37,9 @@ article > table{
 article > table > tfoot{
     bottom: 3rem;
 }
+.toolbarbuttonimg{
+    width: 20px;
+}
 #canvas-container{
     text-align: center;
     width: 820px;
@@ -45,6 +48,17 @@ article > table > tfoot{
 }
 canvas{
     border: 1px solid rgb(0,0,0);    
+}
+#canvas-label{
+    display:none;
+    position: fixed;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    font-size: 14pt;
+}
+#canvas-label:focus{
+    outline:none;
 }
 .midle-canvas{
     margin-left: 50px;
@@ -145,6 +159,7 @@ textarea{
     font-size: 0.8rem;
     letter-spacing: 0;
     padding: 0;
+    text-align: center;
     break-before: avoid !important;
 }
 #dados-veiculos{
@@ -447,11 +462,20 @@ input[type='text'], .modal input[type='date'], .modal input[type='checkbox'], .m
     width: 700px;
     height: 350px;
 }
-.toolbarbutton{
-    width: 30px;
+.toolbarbutton, .toolbarbuttonimg{
     cursor: pointer;
     opacity: 0.5;
     margin-bottom: 10px;
+}
+#form-labels{
+    background:transparent;
+    display: inline;
+}
+#form-labels>input{
+    background: transparent;
+}
+.toolbarbutton{
+    width: 30px;
 }
 .toolbarbutton:hover{
     opacity: 1;

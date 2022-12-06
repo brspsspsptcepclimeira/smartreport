@@ -158,6 +158,7 @@ export class Img{
     }
     set line(newLine){
         this._line = newLine
+        this.ctx.setLineDash([])
     }
     get line(){
         return this._line
@@ -250,18 +251,25 @@ export class Img{
         this.cropY2=this.getMousePosition(event).y
         if(this.crop){
             this.toCrop()
+            this.line=false
+            this.marck = false
         }
         if(this.line){
             this.drawArrow(this.cropX2, this.cropY2, this.cropX1, this.cropY1, 2)
+            this.crop = false
+            this.marck = false
         }
         if(this.marck){
-            this.ctx.fillStyle = this.colorLine;
-            this.ctx.font = '12pt Arial';
+            /* this.ctx.fillStyle = this.colorLine;
+            this.ctx.font = '14pt Arial';
             this.ctx.textAlign = "center"
             this.ctx.fillText(this.marckNumber, this.cropX2, this.cropY2);
             this.marckNumber++
+            this.crop = false
+            this.line = false */
+            //this.toWrite()
         }
-        if(this.crop || this.elipse || this.line || this.marck){
+        if(this.crop || this.elipse || this.line){
             this.currentImg.src = this.canvas.toDataURL()
             this.imgList.push(this.currentImg.src)
             this.currentIndex = this.imgList.length-1
@@ -391,13 +399,13 @@ export class Img{
         //ctx.closePath(); // not used correctly, see comments (use to close off open path)
         ctx.stroke();
       }
-      drawLine(){
+    /*   drawLine(){
         if(this.line){
             let x0 = this.cropX1
             let y0 = this.cropY1
             console.log(`${x0} - ${y0}`)
         }        
-      }
+      } */
     changeImg(up, down){
         const max = this.imgList.length-1
         if(!up && !down){
@@ -456,5 +464,14 @@ export class Img{
         this.ctx.stroke();
         this.ctx.restore();
         console.log('certo')
+    }
+    toWrite(textLabel){
+        this.ctx.fillStyle = this.colorLine;
+        this.ctx.font = '14pt Arial';
+        this.ctx.textAlign = "center"
+        this.ctx.fillText(textLabel, this.cropX2, this.cropY2)
+        this.currentImg.src = this.canvas.toDataURL()
+        this.imgList.push(this.currentImg.src)
+        this.currentIndex = this.imgList.length-1
     }
 }
