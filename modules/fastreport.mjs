@@ -196,7 +196,7 @@ document.querySelector('#magic-veicle-estruct').addEventListener('click', ()=>{
 })
 document.querySelector('#img-close').addEventListener('click', ()=>{
     showModal(myImage.formCaller)
-    alert(myImage.formCaller)
+    //alert(myImage.formCaller)
 })
 document.querySelector('#magic-things-knife').addEventListener('click', ()=>{
     window.open('./pages/knife.html', 'janela', atributos)
@@ -525,5 +525,5 @@ function listar(){
     }    
 }
 function ativarImagem(){
-    alert('teste')
+    //alert('teste')
 }
