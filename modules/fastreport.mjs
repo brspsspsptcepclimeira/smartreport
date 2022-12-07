@@ -19,6 +19,7 @@ function ini(){
 document.onload = ini()
 //************************************************* Variáveis Globias */
 const atributos = `width=660, height=${window.innerHeight}, top=0, left=699, scrollbars=yes, status=no, toolbar=no,location=no, directories=no, menubar=no,resizable=no, fullscreen=no`
+let previusImage = ''
 //************************************************* Menu
 document.querySelector('#menu-number').addEventListener('click', ()=>{showModal('#form-number-report', document.querySelector('#input-number-report'))})
 document.querySelector('#menu-preamble').addEventListener('click', ()=>{showModal('#form-preamble', document.querySelector('#input-delegate'))})
@@ -33,7 +34,7 @@ document.querySelector('#menu-conclusion').addEventListener('click', ()=>{
     toConclusion()
     showModal('#form-conclusion')
 })
-//document.querySelector('#menu-numerar').addEventListener('click', ()=>{ativarImagem()})
+document.querySelector('#menu-numerar').addEventListener('click', ()=>{ativarImagem()})
 document.querySelector('#menu-print').addEventListener('click', ()=>{print()})
 //************************************************* Botões das Janelas */
 document.querySelectorAll('.btn-close').forEach(element=>{
@@ -442,6 +443,7 @@ function writeToHTML(){
     document.querySelector('#report').innerHTML = statement.replaceAll('<p><br></p>', '')
     numerarImage()
     listar()
+    ativarImagem()
 }    
 //********************** Exibe Janela de Edição */
 export function showModal(element_, withfocus=''){
@@ -525,5 +527,24 @@ function listar(){
     }    
 }
 function ativarImagem(){
-    //alert('teste')
+    let imgs = document.querySelectorAll('#report>p>img')
+    let index = 0
+        imgs.forEach(element=>{
+        element.setAttribute(`id`,`reportImage${index}`)
+        console.log(`NULL -> ${element.getAttribute('id')}`)
+        index++     
+        element.addEventListener('dblclick', ()=>{
+            let valor = element.style.width.replace('cm', '').trim()
+            previusImage = `#${element.getAttribute('id')}`
+            document.querySelector('#image_width').value = valor
+            showModal('#form-width-imagem')
+        }) 
+        //console.log(`id = ${element.getAttribute('id')}`)
+    })    
 }
+document.querySelector('#image_width').addEventListener('change', ()=>{
+    hideModal()
+    let img = document.querySelector(previusImage)
+    img.style.maxWidth = '14cm'
+    img.style.width = `${document.querySelector('#image_width').value.trim()}cm`
+})

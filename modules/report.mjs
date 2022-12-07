@@ -43,6 +43,7 @@ export class Report{
         //this.corpuses = []
         this.corpuse = ''
         this.conclusion = ''
+        this.imgIndex = 0
     }
     set number(newNumber){
         this._number = formatMilhar(newNumber)
@@ -211,6 +212,12 @@ export class Report{
     }
     get corpuse(){
         return this.corpuse
+    }
+    set imgIndex(newImgIndex){
+        this._imgIndex = newImgIndex
+    }
+    get imgIndex(){
+        return this._imgIndex
     }
     writeHeader(){
         const statement =  `<p class='class-header'><strong>SECRETARIA DA SEGURANÇA PÚBLICA</strong></p><p class='class-header'><strong>SUPERINTENDÊNCIA DA POLÍCIA TÉCNCIO-CIENTÍFICA</strong></p><p  class='class-header'>INSTITUTO DE CRIMINALÍSTICA</p><P  class='class-header'>PERITO CRIMINAL DR. OCTÁVIO DE BRITO ALVARENGA</P><p class='class-header'>NÚCLEO DE AMERICANA (LIM)</p>`

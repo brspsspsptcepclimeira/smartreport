@@ -283,6 +283,18 @@ div#imgpage{
     padding-top: 0.3rem;
     padding-bottom: 0.8rem;
 }
+#form-width-imagem{
+    background:transparent;
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+#form-width-imagem p{
+    background-color: black;
+    color:white;
+    opacity: 50%;
+    outline: none;
+}
 .legenda{
     text-align: center;
     font-style: italic;
