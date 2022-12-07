@@ -268,11 +268,11 @@ export class Report{
         if(this.questions.length<1){
             questions = '.</p>'
         }else{
-            questions = `, e visava dar resposta aos seguintes quesitos:</p><ol>`
+            questions = `, e visava dar resposta aos seguintes quesitos:</p>`
             for (let i=0; i<this.questions.length; i++){
-                questions += `<li>${this.questions[i]}</li>`
+                questions += `<p class='i-questions'>${i+1}. ${this.questions[i]}</p>`
             }
-            questions += '</ol>'
+            //questions += '</ol>'
         }
         return `<h2 class='class-subtitle2'>Objetivo</h2><p class = 'class-paragraph'>O objetivo do exame pericial, em conformidade com a requisição ${rdo} - ${chamber}, era ${objective}, sendo sua natureza, ${nature}${reportedAs}${questions}`
     }

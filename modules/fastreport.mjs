@@ -33,7 +33,7 @@ document.querySelector('#menu-conclusion').addEventListener('click', ()=>{
     toConclusion()
     showModal('#form-conclusion')
 })
-document.querySelector('#menu-numerar').addEventListener('click', ()=>{listar()})
+//document.querySelector('#menu-numerar').addEventListener('click', ()=>{ativarImagem()})
 document.querySelector('#menu-print').addEventListener('click', ()=>{print()})
 //************************************************* Botões das Janelas */
 document.querySelectorAll('.btn-close').forEach(element=>{
@@ -234,11 +234,11 @@ function toConclusion(){
     }
     let statement = `<h2>Conclusão</h2><p></p>`
     if(report.questions.length>0){
-        statement += `<p>Em resposta aos quesitos:</p><ol>`
+        statement += `<p>Em resposta aos quesitos:</p>`
         for(let i=0; i<report.questions.length; i++){
-            statement += `<li>${report.questions[i]}</li>`
+            statement += `<p class='i-questions'>${i+1}. ${report.questions[i]}</p><p class='i-resp-questions'></p>`
         }
-        statement += `</ol>`
+        //statement += `</ol>`
     }
     statement += `<p>Este laudo segue assinado digitalmente e encontra-se arquivado no sistema GDL da Superintendência da Polícia Técnico Científica do Estado de São Paulo.</p>`
     if(document.querySelector('#check-signature').checked){
@@ -522,6 +522,8 @@ function listar(){
             n3++
         }
         //console.log(div.children[i].tagName)
-    }
-    
+    }    
+}
+function ativarImagem(){
+    alert('teste')
 }
